@@ -1,0 +1,127 @@
+@layer theme {
+:root {
+  --font-size: 16px;
+  
+  /* Headspace-inspired color palette */
+  --background: #1A1A2E;
+  --foreground: #E8E8ED;
+  
+  /* Orange - Primary color (Headspace signature) */
+  --color-orange: #F4743B;
+  --color-orange-light: #FF8E53;
+  --color-orange-dark: #E5632A;
+  
+  /* Dark backgrounds */
+  --color-navy: #16213E;
+  --color-navy-light: #1F2A44;
+  --color-navy-dark: #0F172A;
+  
+  /* Accents */
+  --color-blue: #5B8DEF;
+  --color-purple: #A076F9;
+  --color-yellow: #FDB750;
+  
+  /* Neutral */
+  --color-gray: #6B7280;
+  --color-gray-light: #9CA3AF;
+  --color-gray-dark: #4B5563;
+  
+  --card: #1F2A44;
+  --card-foreground: #E8E8ED;
+  --popover: #1F2A44;
+  --popover-foreground: #E8E8ED;
+  --primary: #F4743B;
+  --primary-foreground: #ffffff;
+  --secondary: #5B8DEF;
+  --secondary-foreground: #ffffff;
+  --muted: #2A3548;
+  --muted-foreground: #9CA3AF;
+  --accent: #A076F9;
+  --accent-foreground: #ffffff;
+  --destructive: #EF4444;
+  --destructive-foreground: #ffffff;
+  --border: rgba(255, 255, 255, 0.1);
+  --input: transparent;
+  --input-background: #2A3548;
+  --switch-background: #4B5563;
+  --font-weight-medium: 500;
+  --font-weight-normal: 400;
+  --ring: #F4743B;
+  --chart-1: #F4743B;
+  --chart-2: #5B8DEF;
+  --chart-3: #A076F9;
+  --chart-4: #FDB750;
+  --chart-5: #FF8E53;
+  --radius: 1.5rem;
+  --sidebar: #1A1A2E;
+  --sidebar-foreground: #E8E8ED;
+  --sidebar-primary: #F4743B;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #1F2A44;
+  --sidebar-accent-foreground: #E8E8ED;
+  --sidebar-border: rgba(255, 255, 255, 0.1);
+  --sidebar-ring: #F4743B;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+h1 {
+  font-size: 3.5rem;
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+}
+
+h2 {
+  font-size: 2.5rem;
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+}
+
+h3 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+h4 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+h5 {
+  font-size: 1.125rem;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+h6 {
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.5;
+}
+
+p {
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+button {
+  font-family: inherit;
+}
+
+* {
+  border-color: var(--border);
+}
+
+body {
+  color: var(--foreground);
+  background: var(--background);
+  font-feature-settings: 'rlig' 1, 'calt' 1;
+}
+}
