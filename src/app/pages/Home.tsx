@@ -1,6 +1,7 @@
 import { motion, useMotionValue, useSpring, useTransform } from "motion/react";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { ArrowRight, Crown, LayoutTemplate, RefreshCw, Wrench } from "lucide-react";
+import { sendContactEmail } from "../services/email";
 
 const floatingStars = [
   { symbol: "✦", color: "#FDB750", delay: 0, x: "12%", y: "14%", size: "text-2xl" },
@@ -39,7 +40,7 @@ const serviceOptions = [
   {
     id: "service-site-revision",
     title: "Site Revision",
-    description: "For businesses with an existing site that needs a modern refresh and stronger usability.",
+    description: "For businesses with an existing site that needs a modern refresh.",
     icon: RefreshCw,
     accent: "#5B8DEF",
     featured: true,
@@ -56,6 +57,9 @@ const serviceOptions = [
 export function Home() {
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
+  const [isSending, setIsSending] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState<{ type: "success" | "error"; message: string } | null>(null);
+  const [expandedImage, setExpandedImage] = useState<{ src: string; label: "Before" | "After" } | null>(null);
 
   const springConfig = { damping: 42, stiffness: 78, mass: 1.05 };
   const x = useSpring(mouseX, springConfig);
@@ -82,8 +86,84 @@ export function Home() {
     }
   };
 
+  const handleContactSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    const form = e.currentTarget;
+    const formData = new FormData(form);
+    const projectTypeSelect = form.elements.namedItem("project_type") as HTMLSelectElement | null;
+    const selectedProjectTypeText = projectTypeSelect?.selectedOptions?.[0]?.text ?? "";
+
+    const templateParams = {
+      name: String(formData.get("name") ?? ""),
+      email: String(formData.get("email") ?? ""),
+      title: selectedProjectTypeText,
+      message: String(formData.get("message") ?? ""),
+    };
+
+    setIsSending(true);
+
+    try {
+      await sendContactEmail(templateParams);
+      setSubmitStatus({ type: "success", message: "Message sent successfully." });
+      form.reset();
+    } catch (error) {
+      const message = error instanceof Error ? error.message : "Unable to send message";
+      setSubmitStatus({ type: "error", message: `Failed to send message: ${message}` });
+    } finally {
+      setIsSending(false);
+    }
+  };
+
+  useEffect(() => {
+    if (!submitStatus) {
+      return;
+    }
+
+    const timeout = window.setTimeout(() => {
+      setSubmitStatus(null);
+    }, 3500);
+
+    return () => window.clearTimeout(timeout);
+  }, [submitStatus]);
+
   return (
     <div className="relative min-h-screen overflow-x-hidden px-6 pt-20 pb-0">
+      {submitStatus && (
+        <div className="fixed right-6 top-6 z-[80] rounded-2xl border px-4 py-3 shadow-xl backdrop-blur-md"
+          style={{
+            background: submitStatus.type === "success" ? "rgba(31, 42, 68, 0.96)" : "rgba(96, 32, 32, 0.95)",
+            borderColor: submitStatus.type === "success" ? "rgba(91, 141, 239, 0.55)" : "rgba(244, 116, 59, 0.55)",
+            color: "#E8E8ED",
+          }}
+        >
+          <p className="text-sm" style={{ fontWeight: 500 }}>{submitStatus.message}</p>
+        </div>
+      )}
+
+      {expandedImage && (
+        <button
+          type="button"
+          aria-label={`Close expanded ${expandedImage.label} image`}
+          onClick={() => setExpandedImage(null)}
+          className="fixed inset-0 z-[90] flex items-center justify-center bg-black/80 p-4"
+        >
+          <div className="relative w-full max-w-5xl">
+            <img
+              src={expandedImage.src}
+              alt={expandedImage.label}
+              className="w-full max-h-[85vh] rounded-2xl object-contain border border-white/20"
+            />
+            <span
+              className="absolute left-1/2 bottom-5 -translate-x-1/2 rounded-full bg-black/65 px-7 py-3 text-base"
+              style={{ color: "#E8E8ED", fontWeight: 600 }}
+            >
+              {expandedImage.label}
+            </span>
+          </div>
+        </button>
+      )}
+
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <motion.div
           className="absolute w-[500px] h-[500px] rounded-full blur-[100px] opacity-20"
@@ -172,111 +252,141 @@ export function Home() {
       </div>
 
       <div className="relative z-10 max-w-7xl mx-auto w-full">
-        <div className="mb-16 mt-4 grid gap-8 lg:grid-cols-[1.08fr_0.92fr] lg:items-end">
-          <motion.div
-            initial={{ opacity: 0, y: 24 }}
+        {/* Hero */}
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, ease: "easeOut" }}
+          className="text-center mb-12 mt-4"
+        >
+          <motion.h1
+            initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, ease: "easeOut" }}
-            className="relative max-w-3xl h-full flex flex-col"
+            transition={{ duration: 0.8, delay: 0.3 }}
+            className="text-4xl md:text-6xl mb-5 leading-tight"
+            style={{ color: "#E8E8ED", fontWeight: 600 }}
           >
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.3 }}
-              className="relative text-4xl md:text-6xl mb-4 leading-tight"
-              style={{ color: "#E8E8ED", fontWeight: 600 }}
-            >
-              Hey, I&apos;m <span style={{ color: "#F4743B" }}>Carver</span>{" "}
-              <motion.span
-                style={{ display: "inline-block", transformOrigin: "70% 70%" }}
-                animate={{ rotate: [0, 18, -8, 18, 0] }}
-                transition={{ duration: 1.6, repeat: Infinity, repeatDelay: 1.2, ease: "easeInOut" }}
+            Amazing websites for{" "}
+            <span style={{ color: "#F4743B" }}>local businesses</span>
+          </motion.h1>
+
+          <motion.h2
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.4 }}
+            className="text-[1.13rem] md:text-xl max-w-2xl mx-auto"
+            style={{ color: "#C7CEDC", fontWeight: 400, lineHeight: 1.7 }}
+          >
+            Hey, im <span style={{ color: "#F4743B", fontWeight: 700 }}>Carver</span>. I design and build clean, modern
+            websites that help local businesses stand out online, attract more customers, and grow with
+            confidence.
+          </motion.h2>
+        </motion.div>
+
+        {/* Service Widgets — horizontal */}
+        <motion.div
+          initial={{ opacity: 0, y: 18 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.5 }}
+          className="grid md:grid-cols-3 gap-4 mb-16"
+        >
+          {serviceOptions.map((option) => {
+            const Icon = option.icon;
+            return (
+              <button
+                key={option.title}
+                type="button"
+                onClick={() => scrollToSection(option.id)}
+                className={`block w-full text-left rounded-2xl border p-5 transition-all duration-300 hover:-translate-y-0.5 ${
+                  option.featured
+                    ? "border-[#FDB750]/45 bg-[linear-gradient(160deg,rgba(36,50,79,0.95),rgba(28,40,65,0.95))] shadow-[0_10px_28px_rgba(253,183,80,0.22)] hover:border-[#FDB750]/70 hover:shadow-[0_14px_40px_rgba(253,183,80,0.45)]"
+                    : "border-white/10 bg-white/5 hover:border-white/25 hover:shadow-lg"
+                }`}
               >
-                👋
-              </motion.span>
-            </motion.p>
-
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.4 }}
-              className="relative text-lg max-w-2xl mb-2 text-left"
-              style={{ color: "#FFFFFF", fontWeight: 400, lineHeight: 1.7 }}
-            >
-              I&apos;m a designer and developer who believes the best interfaces are the ones you don&apos;t even notice.
-              I create calm, modern digital experiences that feel natural and never overwhelming.
-            </motion.p>
-
-            <motion.div
-              initial={{ opacity: 0, y: 18 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.5 }}
-              className="mt-auto"
-            >
-              <div className="flex items-center gap-4 sm:gap-6">
-                <div className="relative h-44 sm:h-56 flex-1 max-w-[280px] rounded-2xl border border-white/10 bg-[#1F2A44]/75 overflow-hidden">
-                  <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_10%,rgba(255,255,255,0.08),transparent_40%)]" />
-                  <span className="absolute left-1/2 bottom-4 -translate-x-1/2 rounded-full bg-black/35 px-4 py-1.5 text-sm" style={{ color: "#E8E8ED", fontWeight: 600 }}>
-                    Before
-                  </span>
-                </div>
-
-                <ArrowRight className="h-8 w-8 shrink-0 text-[#FDB750]" />
-
-                <div className="relative h-44 sm:h-56 flex-1 max-w-[280px] rounded-2xl border border-[#F4743B]/35 bg-[#1F2A44]/90 overflow-hidden">
-                  <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_20%,rgba(244,116,59,0.22),transparent_45%)]" />
-                  <span className="absolute left-1/2 bottom-4 -translate-x-1/2 rounded-full bg-[#F4743B]/70 px-4 py-1.5 text-sm text-white" style={{ fontWeight: 600 }}>
-                    After
-                  </span>
-                </div>
-              </div>
-            </motion.div>
-          </motion.div>
-
-          <motion.aside
-            initial={{ opacity: 0, x: 16 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8, delay: 0.35, ease: "easeOut" }}
-            className="pt-1"
-          >
-            <div className="space-y-4">
-              {serviceOptions.map((option) => {
-                const Icon = option.icon;
-                return (
-                  <button
-                    key={option.title}
-                    type="button"
-                    onClick={() => scrollToSection(option.id)}
-                    className={`block w-full min-h-[146px] text-left rounded-2xl border p-4 transition-all duration-300 hover:-translate-y-0.5 ${
-                      option.featured
-                        ? "border-[#FDB750]/45 bg-[linear-gradient(160deg,rgba(36,50,79,0.95),rgba(28,40,65,0.95))] shadow-[0_10px_28px_rgba(253,183,80,0.22)] hover:border-[#FDB750]/70 hover:shadow-[0_14px_40px_rgba(253,183,80,0.45)]"
-                        : "border-white/10 bg-white/5 hover:border-white/25 hover:shadow-lg"
-                    }`}
+                <div className="flex items-start gap-3">
+                  <span
+                    className="mt-0.5 inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-xl"
+                    style={{ background: `${option.accent}22` }}
                   >
-                    <div className="flex items-start gap-3">
-                      <span className="mt-0.5 inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-xl" style={{ background: `${option.accent}22` }}>
-                        <Icon className="h-4 w-4" style={{ color: option.accent }} />
-                      </span>
-                      <div>
-                        <h4 className="text-xl mb-1 flex items-center gap-2" style={{ color: "#FFFFFF", fontWeight: 700 }}>
-                          {option.title}
-                          {option.featured && <Crown className="h-4 w-4 text-[#FDB750]" />}
-                        </h4>
-                        <p className="text-sm mb-3" style={{ color: "#9CA3AF", fontWeight: 400, lineHeight: 1.5 }}>
-                          {option.description}
-                        </p>
-                        <p className="text-xs" style={{ color: option.featured ? "#FDB750" : "#C7CEDC", fontWeight: 500 }}>
-                          Learn more
-                        </p>
-                      </div>
-                    </div>
-                  </button>
-                );
-              })}
-            </div>
-          </motion.aside>
-        </div>
+                    <Icon className="h-4 w-4" style={{ color: option.accent }} />
+                  </span>
+                  <div>
+                    <h4
+                      className="text-lg mb-1 flex items-center gap-2"
+                      style={{ color: "#FFFFFF", fontWeight: 700 }}
+                    >
+                      {option.title}
+                      {option.featured && <Crown className="h-4 w-4 text-[#FDB750]" />}
+                    </h4>
+                    <p
+                      className="text-sm mb-2"
+                      style={{ color: "#9CA3AF", fontWeight: 400, lineHeight: 1.5 }}
+                    >
+                      {option.description}
+                    </p>
+                    <p
+                      className="text-xs"
+                      style={{ color: option.featured ? "#FDB750" : "#C7CEDC", fontWeight: 500 }}
+                    >
+                      Learn more
+                    </p>
+                  </div>
+                </div>
+              </button>
+            );
+          })}
+        </motion.div>
 
+        {/* Before & After */}
+        <motion.section
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-120px" }}
+          transition={{ duration: 0.7, ease: "easeOut" }}
+          className="mb-16"
+        >
+          <div className="flex items-center gap-6">
+            <button
+              type="button"
+              onClick={() => setExpandedImage({ src: "/image.png", label: "Before" })}
+              className="relative flex-1 rounded-2xl border border-white/10 bg-[#1F2A44]/75 overflow-hidden cursor-zoom-in"
+            >
+              <img
+                src="/image.png"
+                alt="Before"
+                className="w-full h-auto object-cover"
+              />
+              <span
+                className="absolute left-1/2 bottom-5 -translate-x-1/2 rounded-full bg-black/60 px-7 py-3 text-base"
+                style={{ color: "#E8E8ED", fontWeight: 600 }}
+              >
+                Before
+              </span>
+            </button>
+
+            <ArrowRight className="h-10 w-10 shrink-0 text-[#FDB750]" />
+
+            <button
+              type="button"
+              onClick={() => setExpandedImage({ src: "/image1.png", label: "After" })}
+              className="relative flex-1 rounded-2xl border border-[#F4743B]/35 bg-[#1F2A44]/90 overflow-hidden cursor-zoom-in"
+            >
+              <img
+                src="/image1.png"
+                alt="After"
+                className="w-full h-auto object-cover"
+              />
+              <span
+                className="absolute left-1/2 bottom-5 -translate-x-1/2 rounded-full bg-[#F4743B]/85 px-7 py-3 text-base text-white"
+                style={{ fontWeight: 600 }}
+              >
+                After
+              </span>
+            </button>
+          </div>
+        </motion.section>
+
+        {/* Services and Pricing — horizontal */}
         <motion.section
           initial={{ opacity: 0, y: 24 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -290,33 +400,37 @@ export function Home() {
             </h2>
           </div>
 
-          <div className="space-y-8">
-            <div id="service-new-site" className="rounded-[2rem] border border-white/10 bg-[#1F2A44]/88 p-7 md:p-10 min-h-[70vh] shadow-[0_12px_40px_rgba(8,12,26,0.4)] flex flex-col">
-              <div className="mb-6">
-                <h3 className="text-2xl md:text-3xl" style={{ color: "#FFFFFF" }}>New Site</h3>
-                <p className="text-sm mt-1" style={{ color: "#C7CEDC", fontWeight: 500 }}>$1,000 – $2,000</p>
+          <div className="grid md:grid-cols-3 gap-6">
+            {/* New Site */}
+            <div
+              id="service-new-site"
+              className="rounded-2xl border border-white/10 bg-[#1F2A44]/88 p-6 shadow-[0_12px_40px_rgba(8,12,26,0.4)] flex flex-col"
+            >
+              <div className="mb-4">
+                <h3 className="text-xl md:text-2xl" style={{ color: "#FFFFFF" }}>Create new Site</h3>
+                <p className="text-sm mt-1" style={{ color: "#C7CEDC", fontWeight: 500 }}>
+                  $1,000+
+                </p>
               </div>
-              <div className="grid md:grid-cols-2 gap-8">
-                <div>
-                  <p className="mb-3" style={{ color: "#E8E8ED", fontWeight: 600 }}>What this includes</p>
-                  <ul className="space-y-2 text-sm" style={{ color: "#9CA3AF", lineHeight: 1.7 }}>
-                    <li>• Full website design and build from scratch</li>
-                    <li>• Mobile-responsive pages and clear site structure</li>
-                    <li>• Brand-aligned visuals and call-to-action flow</li>
-                  </ul>
-                </div>
-                <div>
-                  <p className="mb-3" style={{ color: "#E8E8ED", fontWeight: 600 }}>Description template</p>
-                  <p className="text-sm" style={{ color: "#9CA3AF", lineHeight: 1.7 }}>
-                    Perfect for businesses with a strong brand but no existing website. We create a clean, modern site that clearly explains what you offer and helps customers take action.
-                  </p>
-                </div>
+              <div className="mb-4">
+                <p className="mb-2 text-sm" style={{ color: "#E8E8ED", fontWeight: 600 }}>
+                  What this includes
+                </p>
+                <ul className="space-y-1.5 text-sm" style={{ color: "#9CA3AF", lineHeight: 1.7 }}>
+                  <li>• Full website design and build from scratch</li>
+                  <li>• Mobile-responsive pages and clear site structure</li>
+                  <li>• Brand-aligned visuals and call-to-action flow</li>
+                </ul>
               </div>
-              <div className="mt-auto pt-8 flex justify-end">
+              <p className="text-sm mb-6" style={{ color: "#9CA3AF", lineHeight: 1.7 }}>
+                Perfect for businesses with a strong brand but no existing website. We create a clean,
+                modern site that clearly explains what you offer and helps customers take action.
+              </p>
+              <div className="mt-auto flex justify-end">
                 <button
                   type="button"
                   onClick={() => scrollToSection("contact-form")}
-                  className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-[#F4743B] to-[#FDB750] px-6 py-2.5 text-white transition-all duration-300 hover:scale-[1.01] hover:shadow-lg"
+                  className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-[#F4743B] to-[#FDB750] px-5 py-2 text-sm text-white transition-all duration-300 hover:scale-[1.01] hover:shadow-lg"
                   style={{ fontWeight: 500 }}
                 >
                   Contact me
@@ -325,32 +439,42 @@ export function Home() {
               </div>
             </div>
 
-            <div id="service-site-revision" className="rounded-[2rem] border border-[#FDB750]/35 bg-[linear-gradient(160deg,rgba(36,50,79,0.95),rgba(28,40,65,0.95))] p-7 md:p-10 min-h-[70vh] shadow-[0_14px_45px_rgba(253,183,80,0.2)] flex flex-col">
-              <div className="mb-6">
-                <h3 className="text-2xl md:text-3xl" style={{ color: "#FFFFFF" }}>Site Revision</h3>
-                <p className="text-sm mt-1" style={{ color: "#C7CEDC", fontWeight: 500 }}>$300 – $800</p>
-              </div>
-              <div className="grid md:grid-cols-2 gap-8">
-                <div>
-                  <p className="mb-3" style={{ color: "#E8E8ED", fontWeight: 600 }}>What this includes</p>
-                  <ul className="space-y-2 text-sm" style={{ color: "#9CA3AF", lineHeight: 1.7 }}>
-                    <li>• Visual redesign and modern layout polish</li>
-                    <li>• Better readability, flow, and navigation</li>
-                    <li>• Improved interaction and conversion clarity</li>
-                  </ul>
+            {/* Site Revision */}
+            <div
+              id="service-site-revision"
+              className="rounded-2xl border border-[#FDB750]/35 bg-[linear-gradient(160deg,rgba(36,50,79,0.95),rgba(28,40,65,0.95))] p-6 shadow-[0_14px_45px_rgba(253,183,80,0.2)] flex flex-col"
+            >
+              <div className="mb-4">
+                <div className="flex items-center gap-3 mb-1">
+                  <h3 className="text-xl md:text-2xl" style={{ color: "#FFFFFF" }}>Site Revision</h3>
+                  <span className="inline-flex rounded-full bg-[#F4743B]/90 px-3 py-1 text-xs text-white" style={{ fontWeight: 600 }}>
+                    My specialty
+                  </span>
                 </div>
-                <div>
-                  <p className="mb-3" style={{ color: "#E8E8ED", fontWeight: 600 }}>Description template</p>
-                  <p className="text-sm" style={{ color: "#9CA3AF", lineHeight: 1.7 }}>
-                    Best for companies that already have a website but need it updated to today&apos;s standards. We refresh the look, improve usability, and make your offer easier to understand.
-                  </p>
-                </div>
+                <p className="text-sm mt-1" style={{ color: "#C7CEDC", fontWeight: 500 }}>
+                  $300 – $1,000
+                </p>
               </div>
-              <div className="mt-auto pt-8 flex justify-end">
+              <div className="mb-4">
+                <p className="mb-2 text-sm" style={{ color: "#E8E8ED", fontWeight: 600 }}>
+                  What this includes
+                </p>
+                <ul className="space-y-1.5 text-sm" style={{ color: "#9CA3AF", lineHeight: 1.7 }}>
+                  <li>• Visual redesign and modern layout polish</li>
+                  <li>• Better readability, flow, and navigation</li>
+                  <li>• Improved interaction and conversion clarity</li>
+                </ul>
+              </div>
+              <p className="text-sm mb-6" style={{ color: "#9CA3AF", lineHeight: 1.7 }}>
+                Best for companies that already have a website but need it updated to today&apos;s
+                standards. We refresh the look, improve usability, and make your offer easier to
+                understand.
+              </p>
+              <div className="mt-auto flex justify-end">
                 <button
                   type="button"
                   onClick={() => scrollToSection("contact-form")}
-                  className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-[#F4743B] to-[#FDB750] px-6 py-2.5 text-white transition-all duration-300 hover:scale-[1.01] hover:shadow-lg"
+                  className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-[#F4743B] to-[#FDB750] px-5 py-2 text-sm text-white transition-all duration-300 hover:scale-[1.01] hover:shadow-lg"
                   style={{ fontWeight: 500 }}
                 >
                   Contact me
@@ -359,32 +483,36 @@ export function Home() {
               </div>
             </div>
 
-            <div id="service-site-management" className="rounded-[2rem] border border-white/10 bg-[#1F2A44]/88 p-7 md:p-10 min-h-[70vh] shadow-[0_12px_40px_rgba(8,12,26,0.4)] flex flex-col">
-              <div className="mb-6">
-                <h3 className="text-2xl md:text-3xl" style={{ color: "#FFFFFF" }}>Site Management</h3>
-                <p className="text-sm mt-1" style={{ color: "#C7CEDC", fontWeight: 500 }}>Custom monthly plan</p>
+            {/* Site Management */}
+            <div
+              id="service-site-management"
+              className="rounded-2xl border border-white/10 bg-[#1F2A44]/88 p-6 shadow-[0_12px_40px_rgba(8,12,26,0.4)] flex flex-col"
+            >
+              <div className="mb-4">
+                <h3 className="text-xl md:text-2xl" style={{ color: "#FFFFFF" }}>Site Management</h3>
+                <p className="text-sm mt-1" style={{ color: "#C7CEDC", fontWeight: 500 }}>
+                  $25/month + Flat fees*
+                </p>
               </div>
-              <div className="grid md:grid-cols-2 gap-8">
-                <div>
-                  <p className="mb-3" style={{ color: "#E8E8ED", fontWeight: 600 }}>What this includes</p>
-                  <ul className="space-y-2 text-sm" style={{ color: "#9CA3AF", lineHeight: 1.7 }}>
-                    <li>• Ongoing edits, content updates, and support</li>
-                    <li>• Routine maintenance and issue prevention</li>
-                    <li>• Continuous improvements as your business grows</li>
-                  </ul>
-                </div>
-                <div>
-                  <p className="mb-3" style={{ color: "#E8E8ED", fontWeight: 600 }}>Description template</p>
-                  <p className="text-sm" style={{ color: "#9CA3AF", lineHeight: 1.7 }}>
-                    Ideal for teams that want long-term website support. We keep your site updated, functioning smoothly, and aligned with your current business goals.
-                  </p>
-                </div>
+              <div className="mb-4">
+                <p className="mb-2 text-sm" style={{ color: "#E8E8ED", fontWeight: 600 }}>
+                  What this includes
+                </p>
+                <ul className="space-y-1.5 text-sm" style={{ color: "#9CA3AF", lineHeight: 1.7 }}>
+                  <li>• Ongoing edits, content updates, and support</li>
+                  <li>• Routine maintenance and issue prevention</li>
+                  <li>• Continuous improvements as your business grows</li>
+                </ul>
               </div>
-              <div className="mt-auto pt-8 flex justify-end">
+              <p className="text-sm mb-6" style={{ color: "#9CA3AF", lineHeight: 1.7 }}>
+                Ideal for teams that want long-term website support. We keep your site updated,
+                functioning smoothly, and aligned with your current business goals.
+              </p>
+              <div className="mt-auto flex justify-end">
                 <button
                   type="button"
                   onClick={() => scrollToSection("contact-form")}
-                  className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-[#F4743B] to-[#FDB750] px-6 py-2.5 text-white transition-all duration-300 hover:scale-[1.01] hover:shadow-lg"
+                  className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-[#F4743B] to-[#FDB750] px-5 py-2 text-sm text-white transition-all duration-300 hover:scale-[1.01] hover:shadow-lg"
                   style={{ fontWeight: 500 }}
                 >
                   Contact me
@@ -395,6 +523,7 @@ export function Home() {
           </div>
         </motion.section>
 
+        {/* Contact Form */}
         <motion.section
           id="contact-form"
           initial={{ opacity: 0, y: 24 }}
@@ -408,12 +537,13 @@ export function Home() {
               Contact me
             </h2>
 
-            <form className="grid gap-5 md:grid-cols-2">
+            <form className="grid gap-5 md:grid-cols-2" onSubmit={handleContactSubmit}>
               <label className="flex flex-col gap-2">
                 <span className="text-sm" style={{ color: "#E8E8ED", fontWeight: 500 }}>
                   Name
                 </span>
                 <input
+                  name="name"
                   type="text"
                   required
                   className="h-12 rounded-xl border border-white/12 bg-white/5 px-4 text-white outline-none transition focus:border-[#F4743B]"
@@ -426,6 +556,7 @@ export function Home() {
                   Email
                 </span>
                 <input
+                  name="email"
                   type="email"
                   required
                   className="h-12 rounded-xl border border-white/12 bg-white/5 px-4 text-white outline-none transition focus:border-[#F4743B]"
@@ -438,6 +569,7 @@ export function Home() {
                   Project type
                 </span>
                 <select
+                  name="project_type"
                   className="h-12 rounded-xl border border-white/12 bg-[#1F2A44] px-4 text-white outline-none transition focus:border-[#F4743B]"
                   defaultValue=""
                   required
@@ -447,7 +579,7 @@ export function Home() {
                   </option>
                   <option value="redesign">Website redesign / modernization</option>
                   <option value="new-build">Brand-new website</option>
-                  <option value="other">Other project</option>
+                  <option value="site-management">Site management</option>
                 </select>
               </label>
 
@@ -456,6 +588,7 @@ export function Home() {
                   Message
                 </span>
                 <textarea
+                  name="message"
                   required
                   rows={5}
                   className="rounded-xl border border-white/12 bg-white/5 p-4 text-white outline-none transition focus:border-[#F4743B]"
@@ -466,16 +599,44 @@ export function Home() {
               <div className="md:col-span-2">
                 <button
                   type="submit"
+                  disabled={isSending}
                   className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-[#F4743B] to-[#FDB750] px-7 py-3 text-white transition-all duration-300 hover:scale-[1.01] hover:shadow-lg"
                   style={{ fontWeight: 500 }}
                 >
-                  Send project details
+                  {isSending ? "Sending..." : "Send project details"}
                   <ArrowRight className="h-4 w-4" />
                 </button>
               </div>
             </form>
           </div>
         </motion.section>
+
+        {/* Footer */}
+        <footer className="border-t border-white/10 mt-8 py-10">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+            <p className="text-sm" style={{ color: "#9CA3AF" }}>
+              © {new Date().getFullYear()} Starber. All rights reserved.
+            </p>
+            <div className="flex items-center gap-6">
+              <button
+                type="button"
+                onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+                className="text-sm transition-colors hover:text-white"
+                style={{ color: "#9CA3AF" }}
+              >
+                Back to top
+              </button>
+              <button
+                type="button"
+                onClick={() => scrollToSection("contact-form")}
+                className="text-sm transition-colors hover:text-white"
+                style={{ color: "#9CA3AF" }}
+              >
+                Contact
+              </button>
+            </div>
+          </div>
+        </footer>
       </div>
     </div>
   );
