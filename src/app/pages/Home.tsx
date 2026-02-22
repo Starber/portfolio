@@ -83,7 +83,21 @@ const faqItems = [
   {
     id: "faq-payment-methods",
     question: "What payment methods do you accept?",
-    answer: "I accept Venmo, and credit/debit cards over the phone or via online invoicing from my trusted payment provider (Stripe).",
+    answer: (
+      <>
+        I accept Venmo, and credit/debit cards over the phone or via online invoicing from my trusted payment
+        provider (
+        <a
+          href="https://stripe.com"
+          target="_blank"
+          rel="noreferrer"
+          className="text-accent-secondary underline underline-offset-2 hover:text-accent-primary"
+        >
+          Stripe
+        </a>
+        ).
+      </>
+    ),
   },
   {
     id: "faq-existing-site",
@@ -664,7 +678,7 @@ export function Home() {
                   </button>
 
                   {isOpen && (
-                    <div id={`${item.id}-content`} className="px-5 md:px-7 pb-5 md:pb-6 pl-[4.5rem]">
+                    <div id={`${item.id}-content`} className="px-5 md:px-7 pb-5 md:pb-6 pl-[4.5rem] md:pl-[4.75rem]">
                       <p className="text-sm md:text-base text-body leading-[1.7]">
                         {item.answer}
                       </p>
