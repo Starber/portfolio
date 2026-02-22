@@ -98,7 +98,11 @@ export function StyleGuidePage() {
               <CardTitle>Text Token Quick Reference</CardTitle>
               <CardDescription>Use these tokens intentionally for hierarchy and readability.</CardDescription>
             </CardHeader>
-            <CardContent className="grid gap-3 text-sm sm:grid-cols-2 lg:grid-cols-4">
+            <CardContent className="grid gap-3 text-sm sm:grid-cols-2 lg:grid-cols-5">
+              <div className="rounded-lg border border-border bg-card/70 p-3">
+                <p className="font-semibold text-body">text-body</p>
+                <p className="mt-1 text-body">Default body paragraphs and longer general copy (Home-style text).</p>
+              </div>
               <div className="rounded-lg border border-border bg-card/70 p-3">
                 <p className="font-semibold text-accent-primary">text-accent-primary</p>
                 <p className="mt-1 text-subtle">Primary highlights, key labels, short emphasis.</p>
@@ -132,6 +136,9 @@ export function StyleGuidePage() {
               <p>
                 Paragraph text uses the base theme styles and line-height to keep content readable across desktop
                 and mobile.
+              </p>
+              <p className="text-body">
+                This is `text-body` (#9CA3AF), matching the paragraph-style copy used throughout the Home page.
               </p>
 
               <div className="mt-4 grid gap-2 rounded-xl border border-border bg-card/70 p-4 md:grid-cols-2">
@@ -299,6 +306,7 @@ export function StyleGuidePage() {
             </CardHeader>
             <CardContent className="space-y-5">
               <div className="flex flex-wrap gap-3">
+                <Button className="btn-gradient text-white hover:text-white">Gradient (Home CTA)</Button>
                 <Button className="border border-transparent bg-[var(--color-orange)] text-white hover:bg-[var(--color-orange-dark)]">
                   Default
                 </Button>

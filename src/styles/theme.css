@@ -27,6 +27,7 @@
   --color-gray-dark: #4B5563;
 
   /* Semantic text accents */
+  --text-body: #9CA3AF;
   --text-accent-primary: #F4743B;
   --text-accent-secondary: #5B8DEF;
   --text-accent-tertiary: #A076F9;
@@ -145,5 +146,37 @@ body {
 
 .text-subtle {
   color: var(--text-subtle);
+}
+
+.text-body {
+  color: var(--text-body);
+}
+
+/* Toast notifications */
+.toast-success {
+  background: rgba(31, 42, 68, 0.96);
+  border-color: rgba(91, 141, 239, 0.55);
+}
+
+.toast-error {
+  background: rgba(96, 32, 32, 0.95);
+  border-color: rgba(244, 116, 59, 0.55);
+}
+
+/* Ambient radial glow overlay */
+.bg-radial-glow {
+  background:
+    radial-gradient(circle at 20% 8%, rgba(255, 255, 255, 0.05), transparent 40%),
+    radial-gradient(circle at 80% 20%, rgba(120, 160, 255, 0.07), transparent 42%),
+    radial-gradient(circle at 52% 70%, rgba(244, 116, 59, 0.08), transparent 45%);
+}
+
+/* Orange gradient button */
+.btn-gradient {
+  background: linear-gradient(to right, #F4743B, #FDB750);
+}
+
+.btn-gradient:hover {
+  box-shadow: 0 10px 25px rgba(244, 116, 59, 0.3);
 }
 }

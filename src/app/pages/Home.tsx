@@ -196,7 +196,7 @@ export function Home() {
                 <h3 id="contact-status-title" className="text-lg font-semibold text-white">
                   {submitStatus.type === "success" ? "Message sent" : "Message not sent"}
                 </h3>
-                <p className="mt-1 text-sm md:text-base text-[#C7CEDC] leading-[1.6]">
+                <p className="mt-1 text-sm md:text-base text-subtle leading-[1.6]">
                   {submitStatus.message}
                 </p>
               </div>
@@ -206,7 +206,7 @@ export function Home() {
               <button
                 type="button"
                 onClick={dismissSubmitStatus}
-                className="inline-flex items-center justify-center rounded-full bg-gradient-to-r from-[#F4743B] to-[#FDB750] px-5 py-2 text-sm font-medium text-white transition-all duration-300 hover:scale-[1.01] hover:shadow-lg"
+                className="inline-flex items-center justify-center rounded-full btn-gradient px-5 py-2 text-sm font-medium text-white transition-all duration-300 hover:scale-[1.01]"
               >
                 Dismiss
               </button>
@@ -320,7 +320,7 @@ export function Home() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.4 }}
-            className="text-[1.13rem] md:text-xl max-w-2xl mx-auto text-[#C7CEDC] font-normal leading-[1.7]"
+            className="text-[1.13rem] md:text-xl max-w-2xl mx-auto text-subtle font-normal leading-[1.7]"
           >
             Hey, im <span className="text-[#F4743B] font-bold">Carver</span>. I design and build clean, modern
             websites that help local businesses stand out online, attract more customers, and grow with
@@ -428,12 +428,12 @@ export function Home() {
             >
               <div className="mb-4">
                 <h3 className="text-xl md:text-2xl text-white">Create new Site</h3>
-                <p className="text-sm mt-1 text-[#C7CEDC] font-medium">
+                <p className="text-sm mt-1 text-subtle font-medium">
                   $1,000+
                 </p>
               </div>
               <div className="mb-4">
-                <p className="text-sm mt-1 text-[#C7CEDC] font-medium">
+                <p className="text-sm mt-1 text-body font-medium">
                   When you need a new site for a new or existing business.
                 </p>
               </div>
@@ -441,13 +441,13 @@ export function Home() {
                 <p className="mb-2 text-base font-semibold">
                   What this includes
                 </p>
-                <ul className="space-y-1.5 text-sm text-[#9CA3AF] leading-[1.7]">
+                <ul className="space-y-1.5 text-sm text-body leading-[1.7]">
                   <li>• Full website design and build from scratch</li>
                   <li>• Mobile-responsive pages and clear site structure</li>
                   <li>• Brand-aligned visuals and call-to-action flow</li>
                 </ul>
               </div>
-              <p className="text-sm mb-6 text-[#9CA3AF] leading-[1.7]">
+              <p className="text-sm mb-6 text-body leading-[1.7]">
                 Perfect for businesses with a strong brand but no existing website. We create a clean,
                 modern site that clearly explains what you offer and helps customers take action.
               </p>
@@ -455,7 +455,7 @@ export function Home() {
                 <button
                   type="button"
                   onClick={() => scrollToSection("contact-form")}
-                  className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-[#F4743B] to-[#FDB750] px-5 py-2 text-sm text-white transition-all duration-300 hover:scale-[1.01] hover:shadow-lg font-medium"
+                  className="inline-flex items-center gap-2 rounded-full btn-gradient px-5 py-2 text-sm text-white transition-all duration-300 hover:scale-[1.01] font-medium"
                 >
                   Contact me
                   <ArrowRight className="h-4 w-4" />
@@ -475,13 +475,13 @@ export function Home() {
                     My specialty
                   </span>
                 </div>
-                <p className="text-sm mt-1 text-[#C7CEDC] font-medium">
+                <p className="text-sm mt-1 text-subtle font-medium">
                   $300 – $1,000
                 </p>
               
               </div>
               <div className="mb-4">
-                <p className="text-sm mt-1 text-[#C7CEDC] font-medium">
+                <p className="text-sm mt-1 text-body font-medium">
                   When you have an existing site that needs a modern refresh.
                 </p>
               </div>
@@ -489,13 +489,13 @@ export function Home() {
                 <p className="mb-2 text-base font-semibold">
                   What this includes
                 </p>
-                <ul className="space-y-1.5 text-sm text-[#9CA3AF] leading-[1.7]">
+                <ul className="space-y-1.5 text-sm text-body leading-[1.7]">
                   <li>• Visual redesign and modern layout polish</li>
                   <li>• Better readability, flow, and navigation</li>
                   <li>• Improved interaction and conversion clarity</li>
                 </ul>
               </div>
-              <p className="text-sm mb-6 text-[#9CA3AF] leading-[1.7]">
+              <p className="text-sm mb-6 text-body leading-[1.7]">
                 Best for companies that already have a website but need it updated to today&apos;s
                 standards. We refresh the look, improve usability, and make your offer easier to
                 understand.
@@ -504,7 +504,7 @@ export function Home() {
                 <button
                   type="button"
                   onClick={() => scrollToSection("contact-form")}
-                  className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-[#F4743B] to-[#FDB750] px-5 py-2 text-sm text-white transition-all duration-300 hover:scale-[1.01] hover:shadow-lg font-medium"
+                  className="inline-flex items-center gap-2 rounded-full btn-gradient px-5 py-2 text-sm text-white transition-all duration-300 hover:scale-[1.01] font-medium"
                 >
                   Contact me
                   <ArrowRight className="h-4 w-4" />
@@ -519,12 +519,12 @@ export function Home() {
             >
               <div className="mb-4">
                 <h3 className="text-xl md:text-2xl text-white">Site Management</h3>
-                <p className="text-sm mt-1 text-[#C7CEDC] font-medium">
+                <p className="text-sm mt-1 text-subtle font-medium">
                   $25/month + Flat fees*
                 </p>
               </div>
               <div className="mb-4">
-                <p className="text-sm mt-1 text-[#C7CEDC] font-medium">
+                <p className="text-sm mt-1 text-body font-medium">
                   Avoid the hassle of hosting and updates. I got you covered!
                 </p>
               </div>
@@ -532,13 +532,13 @@ export function Home() {
                 <p className="mb-2 text-base font-semibold">
                   What this includes
                 </p>
-                <ul className="space-y-1.5 text-sm text-[#9CA3AF] leading-[1.7]">
+                <ul className="space-y-1.5 text-sm text-body leading-[1.7]">
                   <li>• Ongoing edits, content updates, and support</li>
                   <li>• Routine maintenance and issue prevention</li>
                   <li>• Continuous improvements as your business grows</li>
                 </ul>
               </div>
-              <p className="text-sm mb-6 text-[#9CA3AF] leading-[1.7]">
+              <p className="text-sm mb-6 text-body leading-[1.7]">
                 Ideal for teams that want long-term website support. We keep your site updated,
                 functioning smoothly, and aligned with your current business goals.
               </p>
@@ -546,7 +546,7 @@ export function Home() {
                 <button
                   type="button"
                   onClick={() => scrollToSection("contact-form")}
-                  className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-[#F4743B] to-[#FDB750] px-5 py-2 text-sm text-white transition-all duration-300 hover:scale-[1.01] hover:shadow-lg font-medium"
+                  className="inline-flex items-center gap-2 rounded-full btn-gradient px-5 py-2 text-sm text-white transition-all duration-300 hover:scale-[1.01] font-medium"
                 >
                   Contact me
                   <ArrowRight className="h-4 w-4" />
@@ -584,7 +584,7 @@ export function Home() {
                     aria-controls={`${item.id}-content`}
                   >
                     <span
-                      className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full border text-sm border-[#5B8DEF] text-[#C7CEDC] font-medium"
+                      className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full border text-sm border-[#5B8DEF] text-subtle font-medium"
                     >
                       Q
                     </span>
@@ -592,13 +592,13 @@ export function Home() {
                       {item.question}
                     </span>
                     <Plus
-                      className={`h-5 w-5 shrink-0 transition-transform duration-200 text-[#C7CEDC] ${isOpen ? "rotate-45" : "rotate-0"}`}
+                      className={`h-5 w-5 shrink-0 transition-transform duration-200 text-subtle ${isOpen ? "rotate-45" : "rotate-0"}`}
                     />
                   </button>
 
                   {isOpen && (
                     <div id={`${item.id}-content`} className="px-5 md:px-7 pb-5 md:pb-6 pl-[4.5rem]">
-                      <p className="text-sm md:text-base text-[#9CA3AF] leading-[1.7]">
+                      <p className="text-sm md:text-base text-body leading-[1.7]">
                         {item.answer}
                       </p>
                     </div>
@@ -694,7 +694,7 @@ export function Home() {
                           ? "text-[#F4743B]"
                           : MESSAGE_MAX_LENGTH - messageValue.length <= 100
                             ? "text-[#FDB750]"
-                            : "text-[#9CA3AF]"
+                            : "text-body"
                       }`}
                     >
                       {messageValue.length}/{MESSAGE_MAX_LENGTH}
@@ -707,7 +707,7 @@ export function Home() {
                 <button
                   type="submit"
                   disabled={isSending}
-                  className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-[#F4743B] to-[#FDB750] px-7 py-3 text-white transition-all duration-300 hover:scale-[1.01] hover:shadow-lg font-medium"
+                  className="inline-flex items-center gap-2 rounded-full btn-gradient px-7 py-3 text-white transition-all duration-300 hover:scale-[1.01] font-medium"
                 >
                   {isSending ? "Sending..." : "Send project details"}
                   <ArrowRight className="h-4 w-4" />
@@ -720,21 +720,21 @@ export function Home() {
         {/* Footer */}
         <footer className="border-t border-white/10 mt-8 py-10">
           <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-            <p className="text-sm text-[#9CA3AF]">
+            <p className="text-sm text-body">
               © {new Date().getFullYear()} Starber. All rights reserved.
             </p>
             <div className="flex items-center gap-6">
               <button
                 type="button"
                 onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-                className="text-sm text-[#9CA3AF] transition-colors hover:text-white"
+                className="text-sm text-body transition-colors hover:text-white"
               >
                 Back to top
               </button>
               <button
                 type="button"
                 onClick={() => scrollToSection("contact-form")}
-                className="text-sm text-[#9CA3AF] transition-colors hover:text-white"
+                className="text-sm text-body transition-colors hover:text-white"
               >
                 Contact
               </button>
