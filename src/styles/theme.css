@@ -25,6 +25,12 @@
   --color-gray: #6B7280;
   --color-gray-light: #9CA3AF;
   --color-gray-dark: #4B5563;
+
+  /* Semantic text accents */
+  --text-accent-primary: #F4743B;
+  --text-accent-secondary: #5B8DEF;
+  --text-accent-tertiary: #A076F9;
+  --text-subtle: #C7CEDC;
   
   --card: #1F2A44;
   --card-foreground: #E8E8ED;
@@ -123,5 +129,21 @@ body {
   color: var(--foreground);
   background: var(--background);
   font-feature-settings: 'rlig' 1, 'calt' 1;
+}
+
+.text-accent-primary {
+  color: var(--text-accent-primary);
+}
+
+.text-accent-secondary {
+  color: var(--text-accent-secondary);
+}
+
+.text-accent-tertiary {
+  color: var(--text-accent-tertiary);
+}
+
+.text-subtle {
+  color: var(--text-subtle);
 }
 }

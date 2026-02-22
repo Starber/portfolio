@@ -1,7 +1,8 @@
 import { motion, useMotionValue, useSpring, useTransform } from "motion/react";
 import { useEffect, useState } from "react";
-import { ArrowRight, Crown, LayoutTemplate, Plus, RefreshCw, Wrench } from "lucide-react";
+import { ArrowDown, ArrowRight, Crown, LayoutTemplate, Plus, RefreshCw, Wrench } from "lucide-react";
 import { sendContactEmail } from "../services/email";
+import { CometDivider } from "../components/CometDivider";
 
 const floatingStars = [
   { symbol: "✦", color: "#FDB750", delay: 0, x: "3%", y: "8%", size: "text-2xl" },
@@ -22,12 +23,6 @@ const deepSpaceStars = Array.from({ length: 44 }, (_, index) => ({
   opacity: index % 4 === 0 ? 0.45 : 0.25,
   delay: (index % 10) * 0.45,
 }));
-
-const cometTrails = [
-  { top: "18%", left: "-20%", delay: 0, duration: 9 },
-  { top: "46%", left: "-30%", delay: 2.6, duration: 10 },
-  { top: "86%", left: "-25%", delay: 1.3, duration: 11 },
-];
 
 const serviceOptions = [
   {
@@ -83,6 +78,10 @@ export function Home() {
   const [expandedImage, setExpandedImage] = useState<{ src: string; label: "Before" | "After" } | null>(null);
   const [openFaqId, setOpenFaqId] = useState<string | null>(null);
   const [messageValue, setMessageValue] = useState("");
+
+  const dismissSubmitStatus = () => {
+    setSubmitStatus(null);
+  };
 
   const springConfig = { damping: 42, stiffness: 78, mass: 1.05 };
   const x = useSpring(mouseX, springConfig);
@@ -151,8 +150,71 @@ export function Home() {
     return () => window.clearTimeout(timeout);
   }, [submitStatus]);
 
+  useEffect(() => {
+    if (!submitStatus) {
+      return;
+    }
+
+    const handleEscapeDismiss = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        dismissSubmitStatus();
+      }
+    };
+
+    window.addEventListener("keydown", handleEscapeDismiss);
+    return () => window.removeEventListener("keydown", handleEscapeDismiss);
+  }, [submitStatus]);
+
   return (
     <div className="relative min-h-screen overflow-x-hidden px-6 pt-20 pb-0">
+      {submitStatus && (
+        <div className="fixed inset-0 z-[95] flex items-center justify-center p-4">
+          <div
+            className="absolute inset-0 bg-black/75 backdrop-blur-[2px]"
+            onClick={dismissSubmitStatus}
+            aria-hidden="true"
+          />
+
+          <div
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="contact-status-title"
+            className="relative w-full max-w-md rounded-2xl border border-white/15 bg-[linear-gradient(160deg,rgba(31,42,68,0.95),rgba(26,26,46,0.96))] p-6 md:p-7 shadow-[0_20px_60px_rgba(0,0,0,0.5)]"
+          >
+            <div className="flex items-start gap-4">
+              <span
+                className={`inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-lg font-bold ${
+                  submitStatus.type === "success"
+                    ? "bg-[#A076F9]/30 text-white"
+                    : "bg-[#F4743B]/30 text-white"
+                }`}
+              >
+                {submitStatus.type === "success" ? "✓" : "!"}
+              </span>
+
+              <div className="flex-1">
+                <h3 id="contact-status-title" className="text-lg font-semibold text-white">
+                  {submitStatus.type === "success" ? "Message sent" : "Message not sent"}
+                </h3>
+                <p className="mt-1 text-sm md:text-base text-[#C7CEDC] leading-[1.6]">
+                  {submitStatus.message}
+                </p>
+              </div>
+            </div>
+
+            <div className="mt-6 flex justify-end">
+              <button
+                type="button"
+                onClick={dismissSubmitStatus}
+                className="inline-flex items-center justify-center rounded-full bg-gradient-to-r from-[#F4743B] to-[#FDB750] px-5 py-2 text-sm font-medium text-white transition-all duration-300 hover:scale-[1.01] hover:shadow-lg"
+              >
+                Dismiss
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {expandedImage && (
         <button
           type="button"
@@ -219,23 +281,6 @@ export function Home() {
           />
         ))}
 
-        {cometTrails.map((comet, index) => (
-          <motion.div
-            key={`comet-${index}`}
-            className="absolute h-px"
-            style={{
-              top: comet.top,
-              left: comet.left,
-              width: "180px",
-              background: "linear-gradient(90deg, rgba(255,245,220,0) 0%, rgba(255,209,147,0.55) 65%, rgba(255,209,147,0) 100%)",
-              filter: "blur(0.2px)",
-              transform: "rotate(-14deg)",
-            }}
-            animate={{ x: [0, 1450], opacity: [0, 0.55, 0] }}
-            transition={{ duration: comet.duration + 2, repeat: Infinity, ease: "easeInOut", delay: comet.delay }}
-          />
-        ))}
-
         {floatingStars.map((star, index) => (
           <motion.div
             key={index}
@@ -293,52 +338,73 @@ export function Home() {
           transition={{ duration: 0.7, ease: "easeOut" }}
           className="mb-16"
         >
-          <div className="flex items-center gap-6">
-            <button
-              type="button"
-              onClick={() => setExpandedImage({ src: "/image.png", label: "Before" })}
-              className="relative flex-1 rounded-2xl border border-white/10 bg-[#1F2A44]/75 overflow-hidden cursor-zoom-in"
-            >
-              <img
-                src="/image.png"
-                alt="Before"
-                className="w-full h-auto object-cover"
-              />
-            </button>
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] md:items-center md:gap-6">
+            <div className="flex-1">
+              <div className="mb-3 flex justify-center md:hidden">
+                <div className="inline-flex items-center gap-2 rounded-xl border border-border bg-card/80 px-4 py-2 text-sm">
+                  <span className="font-semibold text-accent-primary">Before:</span>
+                  <span className="text-subtle">Old and crusty</span>
+                </div>
+              </div>
 
-            <ArrowRight className="h-10 w-10 shrink-0 text-[#FDB750]" />
+              <button
+                type="button"
+                onClick={() => setExpandedImage({ src: "/image.png", label: "Before" })}
+                className="relative w-full rounded-2xl border border-white/10 bg-[#1F2A44]/75 overflow-hidden cursor-zoom-in"
+              >
+                <img
+                  src="/image.png"
+                  alt="Before"
+                  className="w-full h-auto object-cover"
+                />
+              </button>
+            </div>
 
-            <button
-              type="button"
-              onClick={() => setExpandedImage({ src: "/image1.png", label: "After" })}
-              className="relative flex-1 rounded-2xl border border-[#F4743B]/35 bg-[#1F2A44]/90 overflow-hidden cursor-zoom-in"
-            >
-              <img
-                src="/image1.png"
-                alt="After"
-                className="w-full h-auto object-cover"
-              />
-            </button>
+            <ArrowDown className="h-10 w-10 shrink-0 justify-self-center text-[#FDB750] md:hidden" />
+            <ArrowRight className="hidden h-10 w-10 shrink-0 text-[#FDB750] md:block" />
+
+            <div className="flex-1">
+              <div className="mb-3 flex justify-center md:hidden">
+                <div className="inline-flex items-center gap-2 rounded-xl border border-border bg-card/80 px-4 py-2 text-sm">
+                  <span className="font-semibold text-accent-secondary">After:</span>
+                  <span className="text-subtle">New hotness</span>
+                </div>
+              </div>
+
+              <button
+                type="button"
+                onClick={() => setExpandedImage({ src: "/image1.png", label: "After" })}
+                className="relative w-full rounded-2xl border border-[#F4743B]/35 bg-[#1F2A44]/90 overflow-hidden cursor-zoom-in"
+              >
+                <img
+                  src="/image1.png"
+                  alt="After"
+                  className="w-full h-auto object-cover"
+                />
+              </button>
+            </div>
           </div>
 
-          <div className="flex items-center gap-6 mt-4">
-            <div className="flex flex-1 items-center justify-center gap-3">
-              <span className="inline-flex rounded-full bg-black/60 px-5 py-2 text-sm font-semibold shrink-0">
-                Before
-              </span>
-              <span className="text-sm text-[#9CA3AF]">Old and crusty</span>
+          <div className="hidden md:flex items-center gap-6 mt-4">
+            <div className="flex flex-1 justify-center">
+              <div className="inline-flex items-center gap-2 rounded-xl border border-border bg-card/80 px-4 py-2 text-sm">
+                <span className="font-semibold text-accent-primary">Before:</span>
+                <span className="text-subtle">Old and crusty</span>
+              </div>
             </div>
 
             <div className="w-10 shrink-0" />
 
-            <div className="flex flex-1 items-center justify-center gap-3">
-              <span className="inline-flex rounded-full bg-black/60 px-5 py-2 text-sm text-white font-semibold shrink-0">
-                After
-              </span>
-              <span className="text-sm text-[#9CA3AF]">New hotness</span>
+            <div className="flex flex-1 justify-center">
+              <div className="inline-flex items-center gap-2 rounded-xl border border-border bg-card/80 px-4 py-2 text-sm">
+                <span className="font-semibold text-accent-secondary">After:</span>
+                <span className="text-subtle">New hotness</span>
+              </div>
             </div>
           </div>
         </motion.section>
+
+        <CometDivider count={2} height="h-12" />
 
         {/* Services and Pricing — horizontal */}
         <motion.section
@@ -560,25 +626,6 @@ export function Home() {
           </div>
 
           <div className="rounded-[2rem] border border-white/12 bg-[linear-gradient(160deg,rgba(31,42,68,0.9),rgba(26,26,46,0.94))] p-7 md:p-10 shadow-[0_16px_50px_rgba(6,10,22,0.45)]">
-            {submitStatus && (
-              <div
-                className={`mb-5 rounded-xl border px-4 py-3 text-base font-semibold shadow-[0_10px_28px_rgba(0,0,0,0.28)] ${
-                  submitStatus.type === "success"
-                    ? "border-[#A076F9] bg-[#A076F9]/22 text-white"
-                    : "border-[#F4743B] bg-[#F4743B]/22 text-white"
-                }`}
-                role="status"
-                aria-live="polite"
-              >
-                <div className="flex items-center gap-2">
-                  <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-black/35 text-sm">
-                    {submitStatus.type === "success" ? "✓" : "!"}
-                  </span>
-                  <span>{submitStatus.message}</span>
-                </div>
-              </div>
-            )}
-
             <form className="grid gap-5 md:grid-cols-2" onSubmit={handleContactSubmit}>
               <label className="flex flex-col gap-2">
                 <span className="text-sm font-medium">
