@@ -76,11 +76,20 @@ const faqItems = [
     answer: "Yes, you have the option to choose both site construction and ongoing management services. I can build your site and then handle all hosting, updates, and maintenance for you so you can focus on your business without worrying about the technical side.",
   },
   {
+    id: "faq-domain-management",
+    question: "If I have you host my site, how do you handle domain management?",
+    answer: "You have two options in this case: 1) You can keep your domain with your current provider under your control and I'll just walk you through some one-time configuration steps, or 2) you can provide me with access to your domain provider and I can handle the configuration for you. Don't worry, your domain is safe and starber.net would be under contract with what you allow regarding your domain name.",
+  },
+  {
     id: "faq-payment-methods",
     question: "What payment methods do you accept?",
     answer: "I accept Venmo, and credit/debit cards over the phone or via online invoicing from my trusted payment provider (Stripe).",
   },
-
+  {
+    id: "faq-existing-site",
+    question: "But, wont I offend my nephew Timmy who built my current site?",
+    answer: "Perhaps. But think of it more positively: Timmy provided the core concept that was vital as a starting point for the enhancements that you now get from starber.net! Thank him for that, he did great work. Now let us build on his legacy!",
+  },
 
 
 ];
@@ -571,11 +580,9 @@ export function Home() {
                   What this includes
                 </p>
                 <ul className="space-y-1.5 text-sm text-body leading-[1.7]">
-                  <li>• I run and maintain your site so you can stay focused on your business</li>
-                  <li>• Ongoing edits, content updates, and reliability checks</li>
-                  <li>• 24-hour turnaround for requested changes</li>
-                  <li>• Priority handling for urgent fixes when something breaks</li>
-                  <li>• Flat-rate edits: $20 minor changes, $50 page revisions, $100 major revisions</li>
+                  <li>• Hosting and updating your site - I handle the technical aspects so you don't have to</li>
+                  <li>• Keep current with rapidly changing search engines (SEO) </li>
+                  <li>• 24-hour turn-around for requested changes*</li>
                 </ul>
               </div>
               <div className="mb-4">
@@ -588,9 +595,20 @@ export function Home() {
                 </ul>
               </div>
               <p className="text-sm mb-6 text-subtle leading-[1.7]">
-                This is the leave-it-to-me option: I handle day-to-day website operations, updates,
-                and maintenance so you don&apos;t have to manage the technical side.
+                This is the leave-it-to-me option: I handle the tech stuff, you just focus on your business.
               </p>
+              <div className="mb-4">
+                <p className="mb-2 text-body">
+                  *Flat-rate edits: 
+                </p>
+                <ul className="space-y-1.5 text-sm text-body leading-[1.7]">
+                  <li>• $20 minor changes</li>
+                  <li>• $50 page revisions</li>
+                  <li>• $100 major revisions</li>
+
+                </ul>
+              </div>
+              
               <div className="mt-auto flex justify-end">
                 <button
                   type="button"
