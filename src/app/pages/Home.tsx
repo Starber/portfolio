@@ -51,20 +51,38 @@ const serviceOptions = [
 
 const faqItems = [
   {
-    id: "faq-payment-methods",
-    question: "What payment methods do you accept?",
-    answer: "I accept Venmo, online invoice payments, and phone payments.",
+    id: "faq-code-delivery",
+    question: "What files or code do you deliver when you are done building my site?",
+    answer: "Your choice of client-side JavaScript output: React, Angular, Vue, or plain HTML/CSS/JavaScript.",
   },
   {
-    id: "faq-build-and-manage",
-    question: "Can you build a new site or revise my current one and manage it afterward?",
-    answer: "Yes — I can handle both the build or revision and ongoing site management.",
+    id: "faq-brand",
+    question: "Can you create a logo and brand identity for my business?",
+    answer: "No. I design the site around your existing brand. I can help with minor things and offer suggestions, but I do not provide logos or overall brand creation.",
+  },
+  {
+    id: "faq-shopping-cart-ecommerce",
+    question: "Can you build an online shopping/purachse system for my site?",
+    answer: "No. I help local businesses get more customers to their physical location by providing a great online presence and identity. There are many online providers of ecommerce systems, shopping carts, etc, that might be better to serve your online sales needs.",
   },
   {
     id: "faq-technologies",
-    question: "Which web platforms and technologies do you work with?",
-    answer: "I specialize in client-side JavaScript projects and can deliver React, Angular, Vue, or plain HTML/CSS/JavaScript builds.",
+    question: "Can you update my Wordpress, WIX or other existing site?",
+    answer: "No. I produce clean, modern HTML and Javascript code that can run on any hosting provider. Sites like Wordpress are more complex and expesive to run, and sites like WIX are proprietary and not compatible with standard web code.",
   },
+  {
+    id: "faq-build-and-manage",
+    question: "If you revise or build my site, can I also have you host and mange it?",
+    answer: "Yes, you have the option to choose both site construction and ongoing management services. I can build your site and then handle all hosting, updates, and maintenance for you so you can focus on your business without worrying about the technical side.",
+  },
+  {
+    id: "faq-payment-methods",
+    question: "What payment methods do you accept?",
+    answer: "I accept Venmo, and credit/debit cards over the phone or via online invoicing from my trusted payment provider (Stripe).",
+  },
+
+
+
 ];
 
 const MESSAGE_MAX_LENGTH = 2000;
@@ -433,7 +451,7 @@ export function Home() {
                 </p>
               </div>
               <div className="mb-4">
-                <p className="text-sm mt-1 text-body font-medium">
+                <p className="text-sm mt-1 text-accent-secondary font-medium">
                   When you need a new site for a new or existing business.
                 </p>
               </div>
@@ -442,15 +460,26 @@ export function Home() {
                   What this includes
                 </p>
                 <ul className="space-y-1.5 text-sm text-body leading-[1.7]">
-                  <li>• Full website design and build from scratch</li>
-                  <li>• Mobile-responsive pages and clear site structure</li>
-                  <li>• Brand-aligned visuals and call-to-action flow</li>
+                  <li>• Full, modern website built from scratch; mobile-friendly</li>
+                  <li>• Optimized for search engines (SEO) and clear value to customers</li>
+                  <li>• Complete set of code ready for your host provider*</li>
                 </ul>
               </div>
-              <p className="text-sm mb-6 text-body leading-[1.7]">
-                Perfect for businesses with a strong brand but no existing website. We create a clean,
-                modern site that clearly explains what you offer and helps customers take action.
+              <div className="mb-4">
+                <p className="mb-2 text-base font-semibold">
+                  What you provide
+                </p>
+                <ul className="space-y-1.5 text-sm text-body leading-[1.7]">
+                  <li>• Brand assets (logo, colors, images)</li>
+                  <li>• Description of your business and goals</li>
+                  <li>• Preferences on look and feel (the vibe)</li>
+                </ul>
+              </div>
+              <p className="text-sm mb-6 text-subtle leading-[1.7]">
+                Perfect when you need a complete web presence that brings people to your business location.
+                You own the finished site and codebase — it is your project, not mine.
               </p>
+
               <div className="mt-auto flex justify-end">
                 <button
                   type="button"
@@ -471,7 +500,7 @@ export function Home() {
               <div className="mb-4">
                 <div className="flex items-center gap-3 mb-1">
                   <h3 className="text-xl md:text-2xl text-white">Site Revision</h3>
-                  <span className="inline-flex rounded-full bg-black/60 px-3 py-1 text-xs text-white font-semibold">
+                  <span className="inline-flex rounded-full border border-[var(--color-yellow)] bg-transparent px-3 py-1 text-xs font-semibold text-[var(--color-yellow)]">
                     My specialty
                   </span>
                 </div>
@@ -481,7 +510,7 @@ export function Home() {
               
               </div>
               <div className="mb-4">
-                <p className="text-sm mt-1 text-body font-medium">
+                <p className="text-sm mt-1 text-accent-secondary font-medium">
                   When you have an existing site that needs a modern refresh.
                 </p>
               </div>
@@ -490,15 +519,24 @@ export function Home() {
                   What this includes
                 </p>
                 <ul className="space-y-1.5 text-sm text-body leading-[1.7]">
-                  <li>• Visual redesign and modern layout polish</li>
-                  <li>• Better readability, flow, and navigation</li>
-                  <li>• Improved interaction and conversion clarity</li>
+                  <li>• Visual redesign and modern layout; mobile-friendly </li>
+                  <li>• Optimized for search engines (SEO) and clear value to customers</li>
+                  <li>• Complete set of code ready for your host provider*</li>
                 </ul>
               </div>
-              <p className="text-sm mb-6 text-body leading-[1.7]">
-                Best for companies that already have a website but need it updated to today&apos;s
-                standards. We refresh the look, improve usability, and make your offer easier to
-                understand.
+              <div className="mb-4">
+                <p className="mb-2 text-base font-semibold">
+                  What you provide
+                </p>
+                <ul className="space-y-1.5 text-sm text-body leading-[1.7]">
+                  <li>• Brand assets (logo, colors, images)</li>
+                  <li>• Description of your business and goals</li>
+                  <li>• Preferences on look and feel (the vibe)</li>
+                </ul>
+              </div>
+              <p className="text-sm mb-6 text-subtle leading-[1.7]">
+                Best when you want a modern, up-to-date version of your existing website without starting over.
+                I refresh design, layout, and usability to current standards, and all code remains yours.
               </p>
               <div className="mt-auto flex justify-end">
                 <button
@@ -524,8 +562,8 @@ export function Home() {
                 </p>
               </div>
               <div className="mb-4">
-                <p className="text-sm mt-1 text-body font-medium">
-                  Avoid the hassle of hosting and updates. I got you covered!
+                <p className="text-sm mt-1 text-accent-secondary font-medium">
+                  When you want hands-off website operation and ongoing updates handled for you.
                 </p>
               </div>
               <div className="mb-4">
@@ -533,14 +571,25 @@ export function Home() {
                   What this includes
                 </p>
                 <ul className="space-y-1.5 text-sm text-body leading-[1.7]">
-                  <li>• Ongoing edits, content updates, and support</li>
-                  <li>• Routine maintenance and issue prevention</li>
-                  <li>• Continuous improvements as your business grows</li>
+                  <li>• I run and maintain your site so you can stay focused on your business</li>
+                  <li>• Ongoing edits, content updates, and reliability checks</li>
+                  <li>• 24-hour turnaround for requested changes</li>
+                  <li>• Priority handling for urgent fixes when something breaks</li>
+                  <li>• Flat-rate edits: $20 minor changes, $50 page revisions, $100 major revisions</li>
                 </ul>
               </div>
-              <p className="text-sm mb-6 text-body leading-[1.7]">
-                Ideal for teams that want long-term website support. We keep your site updated,
-                functioning smoothly, and aligned with your current business goals.
+              <div className="mb-4">
+                <p className="mb-2 text-base font-semibold">
+                  What you provide
+                </p>
+                <ul className="space-y-1.5 text-sm text-body leading-[1.7]">
+                  <li>• Domain name or configuration details (see FAQ)</li>
+
+                </ul>
+              </div>
+              <p className="text-sm mb-6 text-subtle leading-[1.7]">
+                This is the leave-it-to-me option: I handle day-to-day website operations, updates,
+                and maintenance so you don&apos;t have to manage the technical side.
               </p>
               <div className="mt-auto flex justify-end">
                 <button
