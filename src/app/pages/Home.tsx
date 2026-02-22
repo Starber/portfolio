@@ -1,18 +1,18 @@
 import { motion, useMotionValue, useSpring, useTransform } from "motion/react";
 import { useEffect, useState } from "react";
-import { ArrowRight, Crown, LayoutTemplate, RefreshCw, Wrench } from "lucide-react";
+import { ArrowRight, Crown, LayoutTemplate, Plus, RefreshCw, Wrench } from "lucide-react";
 import { sendContactEmail } from "../services/email";
 
 const floatingStars = [
-  { symbol: "✦", color: "#FDB750", delay: 0, x: "12%", y: "14%", size: "text-2xl" },
-  { symbol: "★", color: "#F4743B", delay: 0.4, x: "86%", y: "12%", size: "text-3xl" },
-  { symbol: "✧", color: "#FFDFA6", delay: 0.9, x: "8%", y: "42%", size: "text-xl" },
-  { symbol: "✦", color: "#FDCB74", delay: 1.2, x: "92%", y: "39%", size: "text-2xl" },
-  { symbol: "★", color: "#FDB750", delay: 1.8, x: "16%", y: "72%", size: "text-2xl" },
-  { symbol: "✧", color: "#FFE5B8", delay: 2.2, x: "80%", y: "78%", size: "text-xl" },
-  { symbol: "✦", color: "#F9BC62", delay: 2.6, x: "28%", y: "96%", size: "text-2xl" },
-  { symbol: "★", color: "#FFCF86", delay: 3, x: "72%", y: "96%", size: "text-3xl" },
-  { symbol: "✧", color: "#FFD79B", delay: 3.4, x: "48%", y: "95%", size: "text-xl" },
+  { symbol: "✦", color: "#FDB750", delay: 0, x: "3%", y: "8%", size: "text-2xl" },
+  { symbol: "★", color: "#F4743B", delay: 0.4, x: "97%", y: "10%", size: "text-3xl" },
+  { symbol: "✧", color: "#FFDFA6", delay: 0.9, x: "2%", y: "28%", size: "text-xl" },
+  { symbol: "✦", color: "#FDCB74", delay: 1.2, x: "98%", y: "34%", size: "text-2xl" },
+  { symbol: "★", color: "#FDB750", delay: 1.8, x: "4%", y: "56%", size: "text-2xl" },
+  { symbol: "✧", color: "#FFE5B8", delay: 2.2, x: "96%", y: "62%", size: "text-xl" },
+  { symbol: "✦", color: "#F9BC62", delay: 2.6, x: "5%", y: "84%", size: "text-2xl" },
+  { symbol: "★", color: "#FFCF86", delay: 3, x: "95%", y: "90%", size: "text-3xl" },
+  { symbol: "✧", color: "#FFD79B", delay: 3.4, x: "2%", y: "96%", size: "text-xl" },
 ];
 
 const deepSpaceStars = Array.from({ length: 44 }, (_, index) => ({
@@ -32,15 +32,15 @@ const cometTrails = [
 const serviceOptions = [
   {
     id: "service-new-site",
-    title: "New Site",
-    description: "For customers that don't have a site yet but do have a brand.",
+    title: "Create new site",
+    description: "When you don't have a site yet but do have a brand.",
     icon: LayoutTemplate,
     accent: "#F4743B",
   },
   {
     id: "service-site-revision",
     title: "Site Revision",
-    description: "For businesses with an existing site that needs a modern refresh.",
+    description: "You have an existing site that needs a modern refresh.",
     icon: RefreshCw,
     accent: "#5B8DEF",
     featured: true,
@@ -48,11 +48,32 @@ const serviceOptions = [
   {
     id: "service-site-management",
     title: "Site Management",
-    description: "For teams that want ongoing updates, fixes, and support to keep everything running smoothly.",
+    description: "Avoid the hassle of hosting and updates. I got you covered!",
     icon: Wrench,
     accent: "#A076F9",
   },
 ];
+
+const faqItems = [
+  {
+    id: "faq-payment-methods",
+    question: "What payment methods do you accept?",
+    answer: "I accept Venmo, online invoice payments, and phone payments.",
+  },
+  {
+    id: "faq-build-and-manage",
+    question: "Can you build a new site or revise my current one and manage it afterward?",
+    answer: "Yes — I can handle both the build or revision and ongoing site management.",
+  },
+  {
+    id: "faq-technologies",
+    question: "Which web platforms and technologies do you work with?",
+    answer: "I specialize in client-side JavaScript projects and can deliver React, Angular, Vue, or plain HTML/CSS/JavaScript builds.",
+  },
+];
+
+const MESSAGE_MAX_LENGTH = 2000;
+const MESSAGE_COUNTER_WARNING_AT = 300;
 
 export function Home() {
   const mouseX = useMotionValue(0);
@@ -60,6 +81,8 @@ export function Home() {
   const [isSending, setIsSending] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<{ type: "success" | "error"; message: string } | null>(null);
   const [expandedImage, setExpandedImage] = useState<{ src: string; label: "Before" | "After" } | null>(null);
+  const [openFaqId, setOpenFaqId] = useState<string | null>(null);
+  const [messageValue, setMessageValue] = useState("");
 
   const springConfig = { damping: 42, stiffness: 78, mass: 1.05 };
   const x = useSpring(mouseX, springConfig);
@@ -98,7 +121,7 @@ export function Home() {
       name: String(formData.get("name") ?? ""),
       email: String(formData.get("email") ?? ""),
       title: selectedProjectTypeText,
-      message: String(formData.get("message") ?? ""),
+      message: messageValue,
     };
 
     setIsSending(true);
@@ -107,6 +130,7 @@ export function Home() {
       await sendContactEmail(templateParams);
       setSubmitStatus({ type: "success", message: "Message sent successfully." });
       form.reset();
+      setMessageValue("");
     } catch (error) {
       const message = error instanceof Error ? error.message : "Unable to send message";
       setSubmitStatus({ type: "error", message: `Failed to send message: ${message}` });
@@ -122,25 +146,13 @@ export function Home() {
 
     const timeout = window.setTimeout(() => {
       setSubmitStatus(null);
-    }, 3500);
+    }, 5000);
 
     return () => window.clearTimeout(timeout);
   }, [submitStatus]);
 
   return (
     <div className="relative min-h-screen overflow-x-hidden px-6 pt-20 pb-0">
-      {submitStatus && (
-        <div className="fixed right-6 top-6 z-[80] rounded-2xl border px-4 py-3 shadow-xl backdrop-blur-md"
-          style={{
-            background: submitStatus.type === "success" ? "rgba(31, 42, 68, 0.96)" : "rgba(96, 32, 32, 0.95)",
-            borderColor: submitStatus.type === "success" ? "rgba(91, 141, 239, 0.55)" : "rgba(244, 116, 59, 0.55)",
-            color: "#E8E8ED",
-          }}
-        >
-          <p className="text-sm" style={{ fontWeight: 500 }}>{submitStatus.message}</p>
-        </div>
-      )}
-
       {expandedImage && (
         <button
           type="button"
@@ -155,8 +167,7 @@ export function Home() {
               className="w-full max-h-[85vh] rounded-2xl object-contain border border-white/20"
             />
             <span
-              className="absolute left-1/2 bottom-5 -translate-x-1/2 rounded-full bg-black/65 px-7 py-3 text-base"
-              style={{ color: "#E8E8ED", fontWeight: 600 }}
+              className="absolute left-1/2 bottom-5 -translate-x-1/2 rounded-full bg-black/65 px-7 py-3 text-base font-semibold"
             >
               {expandedImage.label}
             </span>
@@ -166,14 +177,8 @@ export function Home() {
 
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <motion.div
-          className="absolute w-[500px] h-[500px] rounded-full blur-[100px] opacity-20"
-          style={{
-            background: "#F4743B",
-            top: "-10%",
-            left: "-10%",
-            x,
-            y,
-          }}
+          className="absolute w-[500px] h-[500px] rounded-full blur-[100px] opacity-20 bg-[#F4743B] top-[-10%] left-[-10%]"
+          style={{ x, y }}
           animate={{
             scale: [1, 1.2, 1],
             opacity: [0.2, 0.3, 0.2],
@@ -182,11 +187,8 @@ export function Home() {
         />
 
         <motion.div
-          className="absolute w-[400px] h-[400px] rounded-full blur-[100px] opacity-20"
+          className="absolute w-[400px] h-[400px] rounded-full blur-[100px] opacity-20 bg-[#5B8DEF] bottom-[-10%] right-[-10%]"
           style={{
-            background: "#5B8DEF",
-            bottom: "-10%",
-            right: "-10%",
             x: useTransform(x, (value) => -value * 0.5),
             y: useTransform(y, (value) => -value * 0.5),
           }}
@@ -197,7 +199,7 @@ export function Home() {
           transition={{ duration: 10, repeat: Infinity, ease: "easeInOut", delay: 1 }}
         />
 
-        <div className="absolute inset-0" style={{ background: "radial-gradient(circle at 20% 8%, rgba(255,255,255,0.05), transparent 40%), radial-gradient(circle at 80% 20%, rgba(120,160,255,0.07), transparent 42%), radial-gradient(circle at 52% 70%, rgba(244,116,59,0.08), transparent 45%)" }} />
+        <div className="absolute inset-0 bg-radial-glow" />
 
         {deepSpaceStars.map((star, index) => (
           <motion.span
@@ -264,78 +266,24 @@ export function Home() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.3 }}
             className="text-4xl md:text-6xl mb-5 leading-tight"
-            style={{ color: "#E8E8ED", fontWeight: 600 }}
           >
             Amazing websites for{" "}
-            <span style={{ color: "#F4743B" }}>local businesses</span>
+            <span className="text-[#F4743B]">local businesses</span>
           </motion.h1>
 
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.4 }}
-            className="text-[1.13rem] md:text-xl max-w-2xl mx-auto"
-            style={{ color: "#C7CEDC", fontWeight: 400, lineHeight: 1.7 }}
+            className="text-[1.13rem] md:text-xl max-w-2xl mx-auto text-[#C7CEDC] font-normal leading-[1.7]"
           >
-            Hey, im <span style={{ color: "#F4743B", fontWeight: 700 }}>Carver</span>. I design and build clean, modern
+            Hey, im <span className="text-[#F4743B] font-bold">Carver</span>. I design and build clean, modern
             websites that help local businesses stand out online, attract more customers, and grow with
             confidence.
           </motion.h2>
         </motion.div>
 
-        {/* Service Widgets — horizontal */}
-        <motion.div
-          initial={{ opacity: 0, y: 18 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.5 }}
-          className="grid md:grid-cols-3 gap-4 mb-16"
-        >
-          {serviceOptions.map((option) => {
-            const Icon = option.icon;
-            return (
-              <button
-                key={option.title}
-                type="button"
-                onClick={() => scrollToSection(option.id)}
-                className={`block w-full text-left rounded-2xl border p-5 transition-all duration-300 hover:-translate-y-0.5 ${
-                  option.featured
-                    ? "border-[#FDB750]/45 bg-[linear-gradient(160deg,rgba(36,50,79,0.95),rgba(28,40,65,0.95))] shadow-[0_10px_28px_rgba(253,183,80,0.22)] hover:border-[#FDB750]/70 hover:shadow-[0_14px_40px_rgba(253,183,80,0.45)]"
-                    : "border-white/10 bg-white/5 hover:border-white/25 hover:shadow-lg"
-                }`}
-              >
-                <div className="flex items-start gap-3">
-                  <span
-                    className="mt-0.5 inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-xl"
-                    style={{ background: `${option.accent}22` }}
-                  >
-                    <Icon className="h-4 w-4" style={{ color: option.accent }} />
-                  </span>
-                  <div>
-                    <h4
-                      className="text-lg mb-1 flex items-center gap-2"
-                      style={{ color: "#FFFFFF", fontWeight: 700 }}
-                    >
-                      {option.title}
-                      {option.featured && <Crown className="h-4 w-4 text-[#FDB750]" />}
-                    </h4>
-                    <p
-                      className="text-sm mb-2"
-                      style={{ color: "#9CA3AF", fontWeight: 400, lineHeight: 1.5 }}
-                    >
-                      {option.description}
-                    </p>
-                    <p
-                      className="text-xs"
-                      style={{ color: option.featured ? "#FDB750" : "#C7CEDC", fontWeight: 500 }}
-                    >
-                      Learn more
-                    </p>
-                  </div>
-                </div>
-              </button>
-            );
-          })}
-        </motion.div>
+       
 
         {/* Before & After */}
         <motion.section
@@ -356,12 +304,6 @@ export function Home() {
                 alt="Before"
                 className="w-full h-auto object-cover"
               />
-              <span
-                className="absolute left-1/2 bottom-5 -translate-x-1/2 rounded-full bg-black/60 px-7 py-3 text-base"
-                style={{ color: "#E8E8ED", fontWeight: 600 }}
-              >
-                Before
-              </span>
             </button>
 
             <ArrowRight className="h-10 w-10 shrink-0 text-[#FDB750]" />
@@ -376,13 +318,25 @@ export function Home() {
                 alt="After"
                 className="w-full h-auto object-cover"
               />
-              <span
-                className="absolute left-1/2 bottom-5 -translate-x-1/2 rounded-full bg-[#F4743B]/85 px-7 py-3 text-base text-white"
-                style={{ fontWeight: 600 }}
-              >
+            </button>
+          </div>
+
+          <div className="flex items-center gap-6 mt-4">
+            <div className="flex flex-1 items-center justify-center gap-3">
+              <span className="inline-flex rounded-full bg-black/60 px-5 py-2 text-sm font-semibold shrink-0">
+                Before
+              </span>
+              <span className="text-sm text-[#9CA3AF]">Old and crusty</span>
+            </div>
+
+            <div className="w-10 shrink-0" />
+
+            <div className="flex flex-1 items-center justify-center gap-3">
+              <span className="inline-flex rounded-full bg-black/60 px-5 py-2 text-sm text-white font-semibold shrink-0">
                 After
               </span>
-            </button>
+              <span className="text-sm text-[#9CA3AF]">New hotness</span>
+            </div>
           </div>
         </motion.section>
 
@@ -395,7 +349,7 @@ export function Home() {
           className="mb-16"
         >
           <div className="mb-6">
-            <h2 className="text-3xl md:text-4xl mb-2" style={{ color: "#E8E8ED" }}>
+            <h2 className="text-3xl md:text-4xl mb-2">
               Services and pricing
             </h2>
           </div>
@@ -407,22 +361,27 @@ export function Home() {
               className="rounded-2xl border border-white/10 bg-[#1F2A44]/88 p-6 shadow-[0_12px_40px_rgba(8,12,26,0.4)] flex flex-col"
             >
               <div className="mb-4">
-                <h3 className="text-xl md:text-2xl" style={{ color: "#FFFFFF" }}>Create new Site</h3>
-                <p className="text-sm mt-1" style={{ color: "#C7CEDC", fontWeight: 500 }}>
+                <h3 className="text-xl md:text-2xl text-white">Create new Site</h3>
+                <p className="text-sm mt-1 text-[#C7CEDC] font-medium">
                   $1,000+
                 </p>
               </div>
               <div className="mb-4">
-                <p className="mb-2 text-sm" style={{ color: "#E8E8ED", fontWeight: 600 }}>
+                <p className="text-sm mt-1 text-[#C7CEDC] font-medium">
+                  When you need a new site for a new or existing business.
+                </p>
+              </div>
+              <div className="mb-4">
+                <p className="mb-2 text-base font-semibold">
                   What this includes
                 </p>
-                <ul className="space-y-1.5 text-sm" style={{ color: "#9CA3AF", lineHeight: 1.7 }}>
+                <ul className="space-y-1.5 text-sm text-[#9CA3AF] leading-[1.7]">
                   <li>• Full website design and build from scratch</li>
                   <li>• Mobile-responsive pages and clear site structure</li>
                   <li>• Brand-aligned visuals and call-to-action flow</li>
                 </ul>
               </div>
-              <p className="text-sm mb-6" style={{ color: "#9CA3AF", lineHeight: 1.7 }}>
+              <p className="text-sm mb-6 text-[#9CA3AF] leading-[1.7]">
                 Perfect for businesses with a strong brand but no existing website. We create a clean,
                 modern site that clearly explains what you offer and helps customers take action.
               </p>
@@ -430,8 +389,7 @@ export function Home() {
                 <button
                   type="button"
                   onClick={() => scrollToSection("contact-form")}
-                  className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-[#F4743B] to-[#FDB750] px-5 py-2 text-sm text-white transition-all duration-300 hover:scale-[1.01] hover:shadow-lg"
-                  style={{ fontWeight: 500 }}
+                  className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-[#F4743B] to-[#FDB750] px-5 py-2 text-sm text-white transition-all duration-300 hover:scale-[1.01] hover:shadow-lg font-medium"
                 >
                   Contact me
                   <ArrowRight className="h-4 w-4" />
@@ -446,26 +404,32 @@ export function Home() {
             >
               <div className="mb-4">
                 <div className="flex items-center gap-3 mb-1">
-                  <h3 className="text-xl md:text-2xl" style={{ color: "#FFFFFF" }}>Site Revision</h3>
-                  <span className="inline-flex rounded-full bg-[#F4743B]/90 px-3 py-1 text-xs text-white" style={{ fontWeight: 600 }}>
+                  <h3 className="text-xl md:text-2xl text-white">Site Revision</h3>
+                  <span className="inline-flex rounded-full bg-black/60 px-3 py-1 text-xs text-white font-semibold">
                     My specialty
                   </span>
                 </div>
-                <p className="text-sm mt-1" style={{ color: "#C7CEDC", fontWeight: 500 }}>
+                <p className="text-sm mt-1 text-[#C7CEDC] font-medium">
                   $300 – $1,000
+                </p>
+              
+              </div>
+              <div className="mb-4">
+                <p className="text-sm mt-1 text-[#C7CEDC] font-medium">
+                  When you have an existing site that needs a modern refresh.
                 </p>
               </div>
               <div className="mb-4">
-                <p className="mb-2 text-sm" style={{ color: "#E8E8ED", fontWeight: 600 }}>
+                <p className="mb-2 text-base font-semibold">
                   What this includes
                 </p>
-                <ul className="space-y-1.5 text-sm" style={{ color: "#9CA3AF", lineHeight: 1.7 }}>
+                <ul className="space-y-1.5 text-sm text-[#9CA3AF] leading-[1.7]">
                   <li>• Visual redesign and modern layout polish</li>
                   <li>• Better readability, flow, and navigation</li>
                   <li>• Improved interaction and conversion clarity</li>
                 </ul>
               </div>
-              <p className="text-sm mb-6" style={{ color: "#9CA3AF", lineHeight: 1.7 }}>
+              <p className="text-sm mb-6 text-[#9CA3AF] leading-[1.7]">
                 Best for companies that already have a website but need it updated to today&apos;s
                 standards. We refresh the look, improve usability, and make your offer easier to
                 understand.
@@ -474,8 +438,7 @@ export function Home() {
                 <button
                   type="button"
                   onClick={() => scrollToSection("contact-form")}
-                  className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-[#F4743B] to-[#FDB750] px-5 py-2 text-sm text-white transition-all duration-300 hover:scale-[1.01] hover:shadow-lg"
-                  style={{ fontWeight: 500 }}
+                  className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-[#F4743B] to-[#FDB750] px-5 py-2 text-sm text-white transition-all duration-300 hover:scale-[1.01] hover:shadow-lg font-medium"
                 >
                   Contact me
                   <ArrowRight className="h-4 w-4" />
@@ -489,22 +452,27 @@ export function Home() {
               className="rounded-2xl border border-white/10 bg-[#1F2A44]/88 p-6 shadow-[0_12px_40px_rgba(8,12,26,0.4)] flex flex-col"
             >
               <div className="mb-4">
-                <h3 className="text-xl md:text-2xl" style={{ color: "#FFFFFF" }}>Site Management</h3>
-                <p className="text-sm mt-1" style={{ color: "#C7CEDC", fontWeight: 500 }}>
+                <h3 className="text-xl md:text-2xl text-white">Site Management</h3>
+                <p className="text-sm mt-1 text-[#C7CEDC] font-medium">
                   $25/month + Flat fees*
                 </p>
               </div>
               <div className="mb-4">
-                <p className="mb-2 text-sm" style={{ color: "#E8E8ED", fontWeight: 600 }}>
+                <p className="text-sm mt-1 text-[#C7CEDC] font-medium">
+                  Avoid the hassle of hosting and updates. I got you covered!
+                </p>
+              </div>
+              <div className="mb-4">
+                <p className="mb-2 text-base font-semibold">
                   What this includes
                 </p>
-                <ul className="space-y-1.5 text-sm" style={{ color: "#9CA3AF", lineHeight: 1.7 }}>
+                <ul className="space-y-1.5 text-sm text-[#9CA3AF] leading-[1.7]">
                   <li>• Ongoing edits, content updates, and support</li>
                   <li>• Routine maintenance and issue prevention</li>
                   <li>• Continuous improvements as your business grows</li>
                 </ul>
               </div>
-              <p className="text-sm mb-6" style={{ color: "#9CA3AF", lineHeight: 1.7 }}>
+              <p className="text-sm mb-6 text-[#9CA3AF] leading-[1.7]">
                 Ideal for teams that want long-term website support. We keep your site updated,
                 functioning smoothly, and aligned with your current business goals.
               </p>
@@ -512,14 +480,66 @@ export function Home() {
                 <button
                   type="button"
                   onClick={() => scrollToSection("contact-form")}
-                  className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-[#F4743B] to-[#FDB750] px-5 py-2 text-sm text-white transition-all duration-300 hover:scale-[1.01] hover:shadow-lg"
-                  style={{ fontWeight: 500 }}
+                  className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-[#F4743B] to-[#FDB750] px-5 py-2 text-sm text-white transition-all duration-300 hover:scale-[1.01] hover:shadow-lg font-medium"
                 >
                   Contact me
                   <ArrowRight className="h-4 w-4" />
                 </button>
               </div>
             </div>
+          </div>
+        </motion.section>
+
+        {/* FAQ */}
+        <motion.section
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-120px" }}
+          transition={{ duration: 0.7, ease: "easeOut" }}
+          className="mb-16"
+        >
+          <div className="mb-6">
+            <h2 className="text-3xl md:text-4xl mb-2">
+              Frequently asked questions
+            </h2>
+          </div>
+
+          <div className="rounded-2xl border border-white/10 bg-[#1F2A44]/72 backdrop-blur-[2px] overflow-hidden">
+            {faqItems.map((item) => {
+              const isOpen = openFaqId === item.id;
+
+              return (
+                <div key={item.id} className="border-b border-white/10 last:border-b-0">
+                  <button
+                    type="button"
+                    onClick={() => setOpenFaqId(isOpen ? null : item.id)}
+                    className="w-full px-5 md:px-7 py-5 text-left flex items-center gap-4 transition-colors hover:bg-white/[0.03]"
+                    aria-expanded={isOpen}
+                    aria-controls={`${item.id}-content`}
+                  >
+                    <span
+                      className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full border text-sm border-[#5B8DEF] text-[#C7CEDC] font-medium"
+                    >
+                      Q
+                    </span>
+                    <span className="flex-1 text-base md:text-[1.08rem] font-normal">
+                      {item.question}
+                    </span>
+                    <Plus
+                      className={`h-5 w-5 shrink-0 transition-transform duration-200 text-[#C7CEDC] ${isOpen ? "rotate-45" : "rotate-0"}`}
+                    />
+                  </button>
+
+                  {isOpen && (
+                    <div id={`${item.id}-content`} className="px-5 md:px-7 pb-5 md:pb-6 pl-[4.5rem]">
+                      <p className="text-sm md:text-base text-[#9CA3AF] leading-[1.7]">
+                        {item.answer}
+                      </p>
+                    </div>
+                  )}
+                </div>
+              );
+            })}
           </div>
         </motion.section>
 
@@ -532,14 +552,36 @@ export function Home() {
           transition={{ duration: 0.7, ease: "easeOut" }}
           className="pb-6"
         >
-          <div className="rounded-[2rem] border border-white/12 bg-[linear-gradient(160deg,rgba(31,42,68,0.9),rgba(26,26,46,0.94))] p-7 md:p-10 shadow-[0_16px_50px_rgba(6,10,22,0.45)]">
-            <h2 className="text-3xl md:text-4xl mb-2" style={{ color: "#E8E8ED" }}>
+
+          <div className="mb-6">
+            <h2 className="text-3xl md:text-4xl mb-2">
               Contact me
             </h2>
+          </div>
+
+          <div className="rounded-[2rem] border border-white/12 bg-[linear-gradient(160deg,rgba(31,42,68,0.9),rgba(26,26,46,0.94))] p-7 md:p-10 shadow-[0_16px_50px_rgba(6,10,22,0.45)]">
+            {submitStatus && (
+              <div
+                className={`mb-5 rounded-xl border px-4 py-3 text-base font-semibold shadow-[0_10px_28px_rgba(0,0,0,0.28)] ${
+                  submitStatus.type === "success"
+                    ? "border-[#A076F9] bg-[#A076F9]/22 text-white"
+                    : "border-[#F4743B] bg-[#F4743B]/22 text-white"
+                }`}
+                role="status"
+                aria-live="polite"
+              >
+                <div className="flex items-center gap-2">
+                  <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-black/35 text-sm">
+                    {submitStatus.type === "success" ? "✓" : "!"}
+                  </span>
+                  <span>{submitStatus.message}</span>
+                </div>
+              </div>
+            )}
 
             <form className="grid gap-5 md:grid-cols-2" onSubmit={handleContactSubmit}>
               <label className="flex flex-col gap-2">
-                <span className="text-sm" style={{ color: "#E8E8ED", fontWeight: 500 }}>
+                <span className="text-sm font-medium">
                   Name
                 </span>
                 <input
@@ -552,7 +594,7 @@ export function Home() {
               </label>
 
               <label className="flex flex-col gap-2">
-                <span className="text-sm" style={{ color: "#E8E8ED", fontWeight: 500 }}>
+                <span className="text-sm font-medium">
                   Email
                 </span>
                 <input
@@ -565,7 +607,7 @@ export function Home() {
               </label>
 
               <label className="flex flex-col gap-2 md:col-span-2">
-                <span className="text-sm" style={{ color: "#E8E8ED", fontWeight: 500 }}>
+                <span className="text-sm font-medium">
                   Project type
                 </span>
                 <select
@@ -584,24 +626,41 @@ export function Home() {
               </label>
 
               <label className="flex flex-col gap-2 md:col-span-2">
-                <span className="text-sm" style={{ color: "#E8E8ED", fontWeight: 500 }}>
+                <span className="text-sm font-medium">
                   Message
                 </span>
                 <textarea
                   name="message"
                   required
+                  maxLength={MESSAGE_MAX_LENGTH}
                   rows={5}
-                  className="rounded-xl border border-white/12 bg-white/5 p-4 text-white outline-none transition focus:border-[#F4743B]"
+                  value={messageValue}
+                  onChange={(e) => setMessageValue(e.target.value)}
+                  className="rounded-xl border border-white/12 bg-white/5 p-4 text-white outline-none transition focus:border-[#F4743B] resize-none"
                   placeholder="Share a quick overview of your website goals."
                 />
+                {MESSAGE_MAX_LENGTH - messageValue.length <= MESSAGE_COUNTER_WARNING_AT && (
+                  <div className="flex justify-end">
+                    <span
+                      className={`text-xs ${
+                        messageValue.length >= MESSAGE_MAX_LENGTH
+                          ? "text-[#F4743B]"
+                          : MESSAGE_MAX_LENGTH - messageValue.length <= 100
+                            ? "text-[#FDB750]"
+                            : "text-[#9CA3AF]"
+                      }`}
+                    >
+                      {messageValue.length}/{MESSAGE_MAX_LENGTH}
+                    </span>
+                  </div>
+                )}
               </label>
 
               <div className="md:col-span-2">
                 <button
                   type="submit"
                   disabled={isSending}
-                  className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-[#F4743B] to-[#FDB750] px-7 py-3 text-white transition-all duration-300 hover:scale-[1.01] hover:shadow-lg"
-                  style={{ fontWeight: 500 }}
+                  className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-[#F4743B] to-[#FDB750] px-7 py-3 text-white transition-all duration-300 hover:scale-[1.01] hover:shadow-lg font-medium"
                 >
                   {isSending ? "Sending..." : "Send project details"}
                   <ArrowRight className="h-4 w-4" />
@@ -614,23 +673,21 @@ export function Home() {
         {/* Footer */}
         <footer className="border-t border-white/10 mt-8 py-10">
           <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-            <p className="text-sm" style={{ color: "#9CA3AF" }}>
+            <p className="text-sm text-[#9CA3AF]">
               © {new Date().getFullYear()} Starber. All rights reserved.
             </p>
             <div className="flex items-center gap-6">
               <button
                 type="button"
                 onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-                className="text-sm transition-colors hover:text-white"
-                style={{ color: "#9CA3AF" }}
+                className="text-sm text-[#9CA3AF] transition-colors hover:text-white"
               >
                 Back to top
               </button>
               <button
                 type="button"
                 onClick={() => scrollToSection("contact-form")}
-                className="text-sm transition-colors hover:text-white"
-                style={{ color: "#9CA3AF" }}
+                className="text-sm text-[#9CA3AF] transition-colors hover:text-white"
               >
                 Contact
               </button>
