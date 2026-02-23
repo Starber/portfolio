@@ -149,6 +149,13 @@ export function Home() {
     }
   };
 
+  const openFaqAndScroll = (faqId: string) => {
+    setOpenFaqId(faqId);
+    window.setTimeout(() => {
+      scrollToSection("faq-section");
+    }, 0);
+  };
+
   const handleContactSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -465,16 +472,19 @@ export function Home() {
             {/* New Site */}
             <div
               id="service-new-site"
-              className="rounded-2xl border border-white/10 bg-[#1F2A44]/88 p-6 shadow-[0_12px_40px_rgba(8,12,26,0.4)] flex flex-col"
+              className="relative rounded-2xl border border-white/10 border-t-2 border-t-[var(--color-blue)] bg-[#1F2A44]/88 p-6 shadow-[0_12px_40px_rgba(8,12,26,0.4)] flex flex-col"
             >
+              <span className="pointer-events-none absolute right-4 top-4 inline-flex h-9 w-9 items-center justify-center rounded-full border border-[var(--color-blue)]/35 bg-[var(--color-blue)]/12 text-[var(--color-blue)]">
+                <LayoutTemplate className="h-4 w-4" />
+              </span>
               <div className="mb-4">
-                <h3 className="text-xl md:text-2xl text-white">Create new Site</h3>
+                <h3 className="text-[1.35rem] md:text-[2.05rem] text-accent-secondary">Create new Site</h3>
                 <p className="text-sm mt-1 text-subtle font-medium">
                   $1,000+
                 </p>
               </div>
               <div className="mb-4">
-                <p className="text-sm mt-1 text-accent-secondary font-medium">
+                <p className="text-sm mt-1 text-[var(--color-blue)] font-medium">
                   When you need a new site for a new or existing business.
                 </p>
               </div>
@@ -483,9 +493,9 @@ export function Home() {
                   What this includes
                 </p>
                 <ul className="space-y-1.5 text-sm text-body leading-[1.7]">
-                  <li>• Full, modern website built from scratch; mobile-friendly</li>
-                  <li>• Optimized for search engines (SEO) and clear value to customers</li>
-                  <li>• Complete set of code ready for your host provider*</li>
+                  <li className="flex items-start gap-2"><span className="text-[var(--color-blue)]">✓</span><span>Full, modern website built from scratch; mobile-friendly</span></li>
+                  <li className="flex items-start gap-2"><span className="text-[var(--color-blue)]">✓</span><span>Optimized for search engines (SEO) and clear value to customers</span></li>
+                  <li className="flex items-start gap-2"><span className="text-[var(--color-blue)]">✓</span><span>Complete set of code ready for your host provider*</span></li>
                 </ul>
               </div>
               <div className="mb-4">
@@ -493,9 +503,9 @@ export function Home() {
                   What you provide
                 </p>
                 <ul className="space-y-1.5 text-sm text-body leading-[1.7]">
-                  <li>• Brand assets (logo, colors, images)</li>
-                  <li>• Description of your business and goals</li>
-                  <li>• Preferences on look and feel (the vibe)</li>
+                  <li className="flex items-start gap-2"><span className="text-accent-secondary">•</span><span>Brand assets (logo, colors, images)</span></li>
+                  <li className="flex items-start gap-2"><span className="text-accent-secondary">•</span><span>Description of your business and goals</span></li>
+                  <li className="flex items-start gap-2"><span className="text-accent-secondary">•</span><span>Preferences on look and feel (the vibe)</span></li>
                 </ul>
               </div>
               <p className="text-sm mb-6 text-subtle leading-[1.7]">
@@ -518,14 +528,14 @@ export function Home() {
             {/* Site Revision */}
             <div
               id="service-site-revision"
-              className="rounded-2xl border border-[#FDB750]/35 bg-[linear-gradient(160deg,rgba(36,50,79,0.95),rgba(28,40,65,0.95))] p-6 shadow-[0_14px_45px_rgba(253,183,80,0.2)] flex flex-col"
+              className="relative rounded-2xl border border-white/10 border-t-2 border-t-[var(--color-orange)] bg-[linear-gradient(160deg,rgba(36,50,79,0.95),rgba(28,40,65,0.95))] p-6 shadow-[0_12px_40px_rgba(8,12,26,0.4)] flex flex-col"
             >
+              <span className="pointer-events-none absolute right-4 top-4 inline-flex h-9 w-9 items-center justify-center rounded-full border border-[var(--color-orange)]/40 bg-[var(--color-orange)]/12 text-[var(--color-orange)]">
+                <RefreshCw className="h-4 w-4" />
+              </span>
               <div className="mb-4">
                 <div className="flex items-center gap-3 mb-1">
-                  <h3 className="text-xl md:text-2xl text-white">Site Revision</h3>
-                  <span className="inline-flex rounded-full border border-[var(--color-yellow)] bg-transparent px-3 py-1 text-xs font-semibold text-[var(--color-yellow)]">
-                    My specialty
-                  </span>
+                  <h3 className="text-[1.35rem] md:text-[2.05rem] text-accent-primary">Site Revision</h3>
                 </div>
                 <p className="text-sm mt-1 text-subtle font-medium">
                   $300 – $1,000
@@ -533,7 +543,7 @@ export function Home() {
               
               </div>
               <div className="mb-4">
-                <p className="text-sm mt-1 text-accent-secondary font-medium">
+                <p className="text-sm mt-1 text-[var(--color-blue)] font-medium">
                   When you have an existing site that needs a modern refresh.
                 </p>
               </div>
@@ -542,9 +552,9 @@ export function Home() {
                   What this includes
                 </p>
                 <ul className="space-y-1.5 text-sm text-body leading-[1.7]">
-                  <li>• Visual redesign and modern layout; mobile-friendly </li>
-                  <li>• Optimized for search engines (SEO) and clear value to customers</li>
-                  <li>• Complete set of code ready for your host provider*</li>
+                  <li className="flex items-start gap-2"><span className="text-[var(--color-orange)]">↻</span><span>Visual redesign and modern layout; mobile-friendly</span></li>
+                  <li className="flex items-start gap-2"><span className="text-[var(--color-orange)]">✓</span><span>Optimized for search engines (SEO) and clear value to customers</span></li>
+                  <li className="flex items-start gap-2"><span className="text-[var(--color-orange)]">✓</span><span>Complete set of code ready for your host provider*</span></li>
                 </ul>
               </div>
               <div className="mb-4">
@@ -552,9 +562,9 @@ export function Home() {
                   What you provide
                 </p>
                 <ul className="space-y-1.5 text-sm text-body leading-[1.7]">
-                  <li>• Brand assets (logo, colors, images)</li>
-                  <li>• Description of your business and goals</li>
-                  <li>• Preferences on look and feel (the vibe)</li>
+                  <li className="flex items-start gap-2"><span className="text-[var(--color-orange)]">•</span><span>Brand assets (logo, colors, images)</span></li>
+                  <li className="flex items-start gap-2"><span className="text-[var(--color-orange)]">•</span><span>Description of your business and goals</span></li>
+                  <li className="flex items-start gap-2"><span className="text-[var(--color-orange)]">•</span><span>Preferences on look and feel (the vibe)</span></li>
                 </ul>
               </div>
               <p className="text-sm mb-6 text-subtle leading-[1.7]">
@@ -576,16 +586,19 @@ export function Home() {
             {/* Site Management */}
             <div
               id="service-site-management"
-              className="rounded-2xl border border-white/10 bg-[#1F2A44]/88 p-6 shadow-[0_12px_40px_rgba(8,12,26,0.4)] flex flex-col"
+              className="relative rounded-2xl border border-white/10 border-t-2 border-t-[var(--color-purple)] bg-[#1F2A44]/88 p-6 shadow-[0_12px_40px_rgba(8,12,26,0.4)] flex flex-col"
             >
+              <span className="pointer-events-none absolute right-4 top-4 inline-flex h-9 w-9 items-center justify-center rounded-full border border-[var(--color-purple)]/40 bg-[var(--color-purple)]/14 text-[var(--color-purple)]">
+                <Wrench className="h-4 w-4" />
+              </span>
               <div className="mb-4">
-                <h3 className="text-xl md:text-2xl text-white">Site Management</h3>
+                <h3 className="text-[1.35rem] md:text-[2.05rem] text-accent-tertiary">Site Management</h3>
                 <p className="text-sm mt-1 text-subtle font-medium">
                   $25/month + Flat fees*
                 </p>
               </div>
               <div className="mb-4">
-                <p className="text-sm mt-1 text-accent-secondary font-medium">
+                <p className="text-sm mt-1 text-[var(--color-blue)] font-medium">
                   When you want hands-off website operation and ongoing updates handled for you.
                 </p>
               </div>
@@ -594,9 +607,9 @@ export function Home() {
                   What this includes
                 </p>
                 <ul className="space-y-1.5 text-sm text-body leading-[1.7]">
-                  <li>• Hosting and updating your site - I handle the technical aspects so you don't have to</li>
-                  <li>• Keep current with rapidly changing search engines (SEO) </li>
-                  <li>• 24-hour turn-around for requested changes*</li>
+                  <li className="flex items-start gap-2"><span className="text-[var(--color-purple)]">🔧</span><span>Hosting and updating your site - I handle the technical aspects so you don't have to</span></li>
+                  <li className="flex items-start gap-2"><span className="text-[var(--color-purple)]">↻</span><span>Keep current with rapidly changing search engines (SEO)</span></li>
+                  <li className="flex items-start gap-2"><span className="text-[var(--color-purple)]">⏱</span><span>24-hour turn-around for requested changes*</span></li>
                 </ul>
               </div>
               <div className="mb-4">
@@ -604,7 +617,7 @@ export function Home() {
                   What you provide
                 </p>
                 <ul className="space-y-1.5 text-sm text-body leading-[1.7]">
-                  <li>• Domain name or configuration details (see FAQ)</li>
+                  <li className="flex items-start gap-2"><span className="text-[var(--color-purple)]">•</span><span>Domain name or configuration details <button type="button" onClick={() => openFaqAndScroll("faq-domain-management")} className="text-[var(--color-blue)] transition-all duration-200 hover:text-[var(--color-orange)] hover:drop-shadow-[0_0_10px_rgba(91,141,239,0.35)] hover:-translate-y-[1px]">(see FAQ)</button></span></li>
 
                 </ul>
               </div>
@@ -616,9 +629,9 @@ export function Home() {
                   *Flat-rate edits: 
                 </p>
                 <ul className="space-y-1.5 text-sm text-body leading-[1.7]">
-                  <li>• $20 minor changes</li>
-                  <li>• $50 page revisions</li>
-                  <li>• $100 major revisions</li>
+                  <li className="flex items-start gap-2"><span className="text-[var(--color-purple)]">•</span><span>$20 minor changes</span></li>
+                  <li className="flex items-start gap-2"><span className="text-[var(--color-purple)]">•</span><span>$50 page revisions</span></li>
+                  <li className="flex items-start gap-2"><span className="text-[var(--color-purple)]">•</span><span>$100 major revisions</span></li>
 
                 </ul>
               </div>
@@ -639,6 +652,7 @@ export function Home() {
 
         {/* FAQ */}
         <motion.section
+          id="faq-section"
           initial={{ opacity: 0, y: 24 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-120px" }}
@@ -656,7 +670,10 @@ export function Home() {
               const isOpen = openFaqId === item.id;
 
               return (
-                <div key={item.id} className="border-b border-white/10 last:border-b-0">
+                <div
+                  key={item.id}
+                  className={`border-b border-white/10 last:border-b-0 transition-colors ${isOpen ? "bg-[var(--color-blue)]/8" : "bg-transparent"}`}
+                >
                   <button
                     type="button"
                     onClick={() => setOpenFaqId(isOpen ? null : item.id)}
@@ -678,7 +695,10 @@ export function Home() {
                   </button>
 
                   {isOpen && (
-                    <div id={`${item.id}-content`} className="px-5 md:px-7 pb-5 md:pb-6 pl-[4.5rem] md:pl-[4.75rem]">
+                    <div
+                      id={`${item.id}-content`}
+                      className="border-l border-[var(--color-blue)]/35 px-5 md:px-7 pb-5 md:pb-6 pl-[4.5rem] md:pl-[4.75rem]"
+                    >
                       <p className="text-sm md:text-base text-body leading-[1.7]">
                         {item.answer}
                       </p>
