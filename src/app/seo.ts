@@ -20,7 +20,7 @@ const DEFAULT_SHARE_IMAGE_PATH = "/starber_site_screenshot.png";
 
 const routeSeoConfig: Record<string, RouteSeoConfig> = {
   "/": {
-    title: "Websites for Local Businesses | Starber",
+    title: "Websites for Local Businesses",
     description:
       "Starber designs, builds, and manages modern websites for local businesses with clear UX, strong performance, and practical SEO foundations.",
     robots: "index, follow",
@@ -30,7 +30,7 @@ const routeSeoConfig: Record<string, RouteSeoConfig> = {
   "/about": {
     title: "About Starber | Meet Carver",
     description:
-      "Learn about Carver at Starber and how he helps local businesses with modern website design, rebuilds, ongoing management, and SEO best practices.",
+      "Learn about Carver and how he helps local businesses with modern website design, rebuilds, ongoing management, and SEO best practices.",
     robots: "index, follow",
     type: "profile",
     imageAlt: "About Starber and services overview",
