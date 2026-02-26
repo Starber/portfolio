@@ -11,4 +11,6 @@ export const routeDefinitions = [
   { path: "/style-guide", Component: StyleGuidePage },
 ];
 
-export const router = createBrowserRouter(routeDefinitions);
+export function createAppRouter() {
+  return createBrowserRouter(routeDefinitions);
+}

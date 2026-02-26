@@ -12,7 +12,7 @@
 
 import fs from "node:fs";
 import path from "node:path";
-import { fileURLToPath } from "node:url";
+import { fileURLToPath, pathToFileURL } from "node:url";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const toAbs = (p) => path.resolve(__dirname, "..", p);
@@ -26,7 +26,8 @@ async function prerender() {
   const template = fs.readFileSync(toAbs("dist/index.html"), "utf-8");
 
   // Import the compiled server entry (ESM, built to dist/server/).
-  const { render } = await import(toAbs("dist/server/entry-server.js"));
+  const serverEntryUrl = pathToFileURL(toAbs("dist/server/entry-server.js")).href;
+  const { render } = await import(serverEntryUrl);
 
   for (const url of routes) {
     console.log(`  Pre-rendering ${url} …`);

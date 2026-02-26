@@ -168,7 +168,7 @@ export function AboutPage() {
             >
               I design, build, and manage websites for local
               businesses. I focus on simple, understandable UX and modern design that keeps up with
-              today's standards helping real businesses stand out online and reach more customers.
+              today's standards — helping real businesses stand out online and reach more customers.
             </p>
           </div>
 
