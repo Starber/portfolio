@@ -166,9 +166,9 @@ export function AboutPage() {
               className="text-lg max-w-2xl leading-[1.75]"
               style={{ color: "#9CA3AF", fontWeight: 400 }}
             >
-              I'm an entrepreneur who designs, builds, and manages websites for local
+              I design, build, and manage websites for local
               businesses. I focus on simple, understandable UX and modern design that keeps up with
-              today's standards — helping real businesses stand out online and reach more customers.
+              today's standards helping real businesses stand out online and reach more customers.
             </p>
           </div>
 
