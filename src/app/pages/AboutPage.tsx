@@ -2,11 +2,13 @@ import { motion } from "motion/react";
 import { Code2, Palette, Globe, MonitorSmartphone, Search, Wrench } from "lucide-react";
 import { useEffect } from "react";
 import { useNavigate } from "react-router";
+import { applySeoForPath } from "../seo";
 
 export function AboutPage() {
   const navigate = useNavigate();
 
   useEffect(() => {
+    applySeoForPath("/about");
     window.scrollTo({ top: 0, behavior: "auto" });
   }, []);
 

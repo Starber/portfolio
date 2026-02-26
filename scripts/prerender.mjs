@@ -27,7 +27,116 @@ async function prerender() {
 
   // Import the compiled server entry (ESM, built to dist/server/).
   const serverEntryUrl = pathToFileURL(toAbs("dist/server/entry-server.js")).href;
-  const { render } = await import(serverEntryUrl);
+  const { render, getSeoForPath } = await import(serverEntryUrl);
+
+  const escapeHtml = (value) =>
+    String(value)
+      .replaceAll("&", "&amp;")
+      .replaceAll("<", "&lt;")
+      .replaceAll(">", "&gt;")
+      .replaceAll('"', "&quot;")
+      .replaceAll("'", "&#39;");
+
+  const replaceTagContent = (html, pattern, nextTag) => {
+    if (pattern.test(html)) {
+      return html.replace(pattern, nextTag);
+    }
+
+    return html.replace("</head>", `  ${nextTag}\n    </head>`);
+  };
+
+  const applySeoToHtml = (html, routePath) => {
+    const seo = getSeoForPath(routePath);
+    let nextHtml = html;
+
+    nextHtml = nextHtml.replace(/<title>[\s\S]*?<\/title>/i, `<title>${escapeHtml(seo.title)}</title>`);
+
+    nextHtml = replaceTagContent(
+      nextHtml,
+      /<meta\s+name=["']description["'][^>]*>/i,
+      `<meta name="description" content="${escapeHtml(seo.description)}" />`,
+    );
+
+    nextHtml = replaceTagContent(
+      nextHtml,
+      /<meta\s+name=["']robots["'][^>]*>/i,
+      `<meta name="robots" content="${escapeHtml(seo.robots)}" />`,
+    );
+
+    nextHtml = replaceTagContent(
+      nextHtml,
+      /<link\s+rel=["']canonical["'][^>]*>/i,
+      `<link rel="canonical" href="${escapeHtml(seo.url)}" />`,
+    );
+
+    nextHtml = replaceTagContent(
+      nextHtml,
+      /<meta\s+property=["']og:type["'][^>]*>/i,
+      `<meta property="og:type" content="${escapeHtml(seo.type)}" />`,
+    );
+
+    nextHtml = replaceTagContent(
+      nextHtml,
+      /<meta\s+property=["']og:site_name["'][^>]*>/i,
+      `<meta property="og:site_name" content="Starber" />`,
+    );
+
+    nextHtml = replaceTagContent(
+      nextHtml,
+      /<meta\s+property=["']og:title["'][^>]*>/i,
+      `<meta property="og:title" content="${escapeHtml(seo.title)}" />`,
+    );
+
+    nextHtml = replaceTagContent(
+      nextHtml,
+      /<meta\s+property=["']og:description["'][^>]*>/i,
+      `<meta property="og:description" content="${escapeHtml(seo.description)}" />`,
+    );
+
+    nextHtml = replaceTagContent(
+      nextHtml,
+      /<meta\s+property=["']og:url["'][^>]*>/i,
+      `<meta property="og:url" content="${escapeHtml(seo.url)}" />`,
+    );
+
+    nextHtml = replaceTagContent(
+      nextHtml,
+      /<meta\s+property=["']og:image["'][^>]*>/i,
+      `<meta property="og:image" content="${escapeHtml(seo.imageUrl)}" />`,
+    );
+
+    nextHtml = replaceTagContent(
+      nextHtml,
+      /<meta\s+property=["']og:image:alt["'][^>]*>/i,
+      `<meta property="og:image:alt" content="${escapeHtml(seo.imageAlt)}" />`,
+    );
+
+    nextHtml = replaceTagContent(
+      nextHtml,
+      /<meta\s+name=["']twitter:card["'][^>]*>/i,
+      '<meta name="twitter:card" content="summary_large_image" />',
+    );
+
+    nextHtml = replaceTagContent(
+      nextHtml,
+      /<meta\s+name=["']twitter:title["'][^>]*>/i,
+      `<meta name="twitter:title" content="${escapeHtml(seo.title)}" />`,
+    );
+
+    nextHtml = replaceTagContent(
+      nextHtml,
+      /<meta\s+name=["']twitter:description["'][^>]*>/i,
+      `<meta name="twitter:description" content="${escapeHtml(seo.description)}" />`,
+    );
+
+    nextHtml = replaceTagContent(
+      nextHtml,
+      /<meta\s+name=["']twitter:image["'][^>]*>/i,
+      `<meta name="twitter:image" content="${escapeHtml(seo.imageUrl)}" />`,
+    );
+
+    return nextHtml;
+  };
 
   for (const url of routes) {
     console.log(`  Pre-rendering ${url} …`);
@@ -40,6 +149,8 @@ async function prerender() {
       `<div id="root">${appHtml}</div>`,
     );
 
+    const seoHtml = applySeoToHtml(html, url);
+
     // Determine output path: "/" → dist/index.html, "/about" → dist/about/index.html
     let outFile;
     if (url === "/") {
@@ -50,7 +161,7 @@ async function prerender() {
       outFile = path.join(dir, "index.html");
     }
 
-    fs.writeFileSync(outFile, html, "utf-8");
+    fs.writeFileSync(outFile, seoHtml, "utf-8");
     console.log(`  ✓ Written → ${path.relative(toAbs("."), outFile)}`);
   }
 

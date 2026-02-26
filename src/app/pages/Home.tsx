@@ -4,6 +4,7 @@ import { ArrowDown, ArrowRight, Crown, LayoutTemplate, Plus, RefreshCw, Wrench }
 import { useLocation, useNavigate } from "react-router";
 import { sendContactEmail } from "../services/email";
 import { CometDivider } from "../components/CometDivider";
+import { applySeoForPath } from "../seo";
 
 const floatingStars = [
   { symbol: "✦", color: "#FDB750", delay: 0, x: "3%", y: "8%", size: "text-2xl" },
@@ -122,6 +123,10 @@ export function Home() {
   const [expandedImage, setExpandedImage] = useState<{ src: string; label: "Before" | "After" } | null>(null);
   const [openFaqId, setOpenFaqId] = useState<string | null>(null);
   const [messageValue, setMessageValue] = useState("");
+
+  useEffect(() => {
+    applySeoForPath("/");
+  }, []);
 
   const dismissSubmitStatus = () => {
     setSubmitStatus(null);

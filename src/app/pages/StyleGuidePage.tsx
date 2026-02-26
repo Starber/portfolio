@@ -1,4 +1,5 @@
 import { AlertCircle, CheckCircle2 } from "lucide-react";
+import { useEffect } from "react";
 import {
   Accordion,
   AccordionContent,
@@ -42,6 +43,7 @@ import {
 } from "../components/ui/table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../components/ui/tabs";
 import { Textarea } from "../components/ui/textarea";
+import { applySeoForPath } from "../seo";
 
 const colorTokens = [
   { name: "Background", token: "--background" },
@@ -57,6 +59,10 @@ const colorTokens = [
 ];
 
 export function StyleGuidePage() {
+  useEffect(() => {
+    applySeoForPath("/style-guide");
+  }, []);
+
   return (
     <div className="min-h-screen px-6 py-12">
       <div className="mx-auto w-full max-w-6xl space-y-10">

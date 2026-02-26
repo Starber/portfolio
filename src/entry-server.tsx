@@ -15,6 +15,7 @@ import {
   StaticRouterProvider,
 } from "react-router";
 import { routeDefinitions } from "./app/routes";
+export { getSeoForPath } from "./app/seo";
 
 export async function render(url: string): Promise<string> {
   const { query, dataRoutes } = createStaticHandler(routeDefinitions);
