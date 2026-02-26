@@ -1,54 +1,121 @@
 import { motion } from "motion/react";
-import { ArrowLeft, Sparkles, Coffee, Heart, Zap, Target } from "lucide-react";
+import { Code2, Palette, Globe, MonitorSmartphone, Search, Wrench } from "lucide-react";
+import { useEffect } from "react";
 import { useNavigate } from "react-router";
 
 export function AboutPage() {
   const navigate = useNavigate();
 
-  const values = [
-    {
-      emoji: "✨",
-      title: "Clarity over clutter",
-      description: "Every element has a purpose. Nothing extra, nothing missing.",
-    },
-    {
-      emoji: "🌿",
-      title: "Calm over chaos",
-      description: "Interfaces should breathe. Design with space, not noise.",
-    },
-    {
-      emoji: "🧭",
-      title: "Usability over flash",
-      description: "Beautiful is functional. Form follows feeling and flow.",
-    },
-  ];
-
-  const journey = [
-    {
-      icon: Coffee,
-      title: "The Beginning",
-      description: "Started as a curious designer wondering why so many apps felt stressful to use. Decided to do something about it.",
-    },
-    {
-      icon: Heart,
-      title: "The Philosophy",
-      description: "Discovered that the best digital experiences feel invisible – they just work, without demanding attention or causing anxiety.",
-    },
-    {
-      icon: Zap,
-      title: "The Approach",
-      description: "Now I combine design psychology with modern tech to build interfaces that feel like a breath of fresh air.",
-    },
-  ];
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "auto" });
+  }, []);
 
   const skills = [
-    { category: "Design", tools: ["Figma", "Adobe XD", "Sketch", "Prototyping"] },
-    { category: "Development", tools: ["React", "TypeScript", "Next.js", "Tailwind CSS"] },
-    { category: "Motion", tools: ["Framer Motion", "GSAP", "CSS Animations", "Lottie"] },
+    {
+      category: "Frontend",
+      items: ["React", "TypeScript", "JavaScript", "HTML", "CSS", "Tailwind CSS"],
+    },
+    {
+      category: "Design",
+      items: ["Figma", "Layout Systems", "Responsive Design", "UX Writing"],
+    },
+    {
+      category: "Website Operations",
+      items: ["SEO Basics", "Hosting", "Site Maintenance", "Performance Basics"],
+    },
   ];
+
+  const services = [
+    {
+      icon: Globe,
+      title: "New Website Builds",
+      description: "Full design and development of modern, mobile-friendly websites from scratch.",
+      accent: "#F4743B",
+      accentBg: "bg-[#F4743B]/14",
+      accentBorder: "border-[#F4743B]/30",
+    },
+    {
+      icon: MonitorSmartphone,
+      title: "Site Redesigns",
+      description: "Modernizing outdated sites with current design standards and responsive layouts.",
+      accent: "#5B8DEF",
+      accentBg: "bg-[#5B8DEF]/14",
+      accentBorder: "border-[#5B8DEF]/30",
+    },
+    {
+      icon: Wrench,
+      title: "Ongoing Management",
+      description: "Hosting, maintenance, and content updates so you can focus on your business.",
+      accent: "#A076F9",
+      accentBg: "bg-[#A076F9]/16",
+      accentBorder: "border-[#A076F9]/30",
+    },
+    {
+      icon: Search,
+      title: "SEO Optimization",
+      description: "Ensuring your site ranks well and reaches the right local customers.",
+      accent: "#FDB750",
+      accentBg: "bg-[#FDB750]/16",
+      accentBorder: "border-[#FDB750]/30",
+    },
+  ];
+
+  const edgeStars = [
+    { symbol: "✦", left: "3%", top: "10%", color: "#FDB750", size: "text-xl", delay: 0.2 },
+    { symbol: "✧", left: "96%", top: "12%", color: "#FFDFA6", size: "text-lg", delay: 0.8 },
+    { symbol: "★", left: "2%", top: "35%", color: "#F4743B", size: "text-xl", delay: 1.3 },
+    { symbol: "✦", left: "97%", top: "42%", color: "#FDCB74", size: "text-2xl", delay: 1.9 },
+    { symbol: "✧", left: "4%", top: "72%", color: "#FFE5B8", size: "text-lg", delay: 2.4 },
+    { symbol: "★", left: "95%", top: "80%", color: "#FFCF86", size: "text-2xl", delay: 3.1 },
+    { symbol: "✦", left: "3%", top: "93%", color: "#FDB750", size: "text-xl", delay: 3.6 },
+    { symbol: "✧", left: "96%", top: "94%", color: "#FFD79B", size: "text-lg", delay: 4.1 },
+  ];
+
+  const goToHomeSection = (id: string) => {
+    navigate(
+      {
+        pathname: "/",
+        hash: `#${id}`,
+      },
+      {
+        state: { scrollTo: id },
+      },
+    );
+  };
 
   return (
     <div className="min-h-screen flex flex-col px-6 py-12 overflow-hidden relative">
+      <div className="fixed top-5 right-6 z-40 flex flex-wrap justify-end gap-2">
+        <button
+          type="button"
+          onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+          className="rounded-full border border-white/15 bg-card/75 px-4 py-2 text-sm text-white backdrop-blur-[2px] transition-colors"
+        >
+          About me
+        </button>
+        <button
+          type="button"
+          onClick={() => goToHomeSection("services")}
+          className="rounded-full border border-white/15 bg-card/75 px-4 py-2 text-sm text-subtle backdrop-blur-[2px] transition-colors hover:text-white"
+        >
+          Services
+        </button>
+        <button
+          type="button"
+          onClick={() => goToHomeSection("faq-section")}
+          className="rounded-full border border-white/15 bg-card/75 px-4 py-2 text-sm text-subtle backdrop-blur-[2px] transition-colors hover:text-white"
+        >
+          FAQ
+        </button>
+        <button
+          type="button"
+          onClick={() => goToHomeSection("contact-form")}
+          className="rounded-full border border-white/15 bg-card/75 px-4 py-2 text-sm text-subtle backdrop-blur-[2px] transition-colors hover:text-white"
+        >
+          Contact me
+        </button>
+      </div>
+
       {/* Background gradient */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <motion.div
@@ -64,115 +131,85 @@ export function AboutPage() {
             ease: "easeInOut",
           }}
         />
-      </div>
 
-      {/* Back button */}
-      <div className="max-w-5xl mx-auto w-full mb-8">
-        <motion.button
-          initial={{ opacity: 0, x: -20 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.5 }}
-          onClick={() => navigate("/")}
-          className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#1F2A44] hover:bg-[#263854] transition-colors duration-300 text-[#9CA3AF] hover:text-white"
-        >
-          <ArrowLeft className="w-5 h-5" />
-          <span style={{ fontWeight: 500 }}>Back</span>
-        </motion.button>
+        {edgeStars.map((star, index) => (
+          <motion.div
+            key={index}
+            className="absolute"
+            style={{ left: star.left, top: star.top, color: star.color }}
+            animate={{
+              y: [0, -8, 0],
+              opacity: [0.35, 0.72, 0.35],
+              rotate: [0, 6, 0],
+            }}
+            transition={{ duration: 7, repeat: Infinity, ease: "easeInOut", delay: star.delay }}
+          >
+            <span className={`${star.size} drop-shadow-[0_0_14px_rgba(249,162,74,0.45)]`}>{star.symbol}</span>
+          </motion.div>
+        ))}
       </div>
 
       {/* Content */}
-      <div className="max-w-5xl mx-auto w-full flex-1 flex flex-col justify-center z-10">
+      <div className="max-w-5xl mx-auto w-full flex-1 z-10">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, delay: 0.2 }}
         >
-          {/* Header */}
-          <div className="flex items-start gap-6 mb-16">
-            <motion.div 
-              className="w-24 h-24 rounded-3xl bg-gradient-to-br from-[#F4743B] to-[#FF8E53] flex items-center justify-center text-5xl flex-shrink-0"
-              whileHover={{ rotate: 360 }}
-              transition={{ duration: 0.6 }}
-            >
-              ⭐
-            </motion.div>
-            <div>
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#F4743B]/10 border border-[#F4743B]/20 mb-4">
-                <Sparkles className="w-4 h-4 text-[#F4743B]" />
-                <span className="text-sm text-[#F4743B]" style={{ fontWeight: 500 }}>
-                  About Me
+          {/* Header — headshot + intro, no surrounding card */}
+          <div className="mb-20 grid gap-10 md:grid-cols-[260px_minmax(0,1fr)] md:items-start">
+            {/* Headshot */}
+            <div className="mx-auto w-full max-w-[260px]">
+              <div className="aspect-[4/5] rounded-2xl border border-white/15 bg-[#2A3548] flex items-center justify-center text-center px-5">
+                <span className="text-sm text-[#9CA3AF]" style={{ fontWeight: 500 }}>
+                  Headshot placeholder
                 </span>
               </div>
-              <h2 className="mb-4">Hi, I'm Starber</h2>
+            </div>
+
+            {/* Intro text */}
+            <div>
+              <h1 className="text-4xl md:text-5xl mb-5 leading-tight">
+                Hey, I'm{" "}
+                <span className="text-[#F4743B]">Carver</span>
+              </h1>
               <p
-                className="text-lg max-w-2xl mb-4"
-                style={{ color: "#9CA3AF", fontWeight: 400, lineHeight: 1.7 }}
+                className="text-lg max-w-2xl leading-[1.75]"
+                style={{ color: "#9CA3AF", fontWeight: 400 }}
               >
-                I'm a designer and developer who believes the best interfaces are the ones you don't even notice. 
-                I create calm, modern digital experiences that feel natural and never overwhelming.
-              </p>
-              <p
-                className="text-lg max-w-2xl"
-                style={{ color: "#9CA3AF", fontWeight: 400, lineHeight: 1.7 }}
-              >
-                My work blends thoughtful design with smooth interactions using tools like React, TypeScript, Figma, and Tailwind CSS 
-                to build interfaces people actually enjoy using.
+                I'm a 15-year-old entrepreneur who designs, builds, and manages websites for local
+                businesses. I focus on simple, understandable UX and modern design that keeps up with
+                today's standards — helping real businesses stand out online and reach more customers.
               </p>
             </div>
           </div>
 
-          {/* Journey */}
-          <div className="mb-16">
-            <h3 className="mb-8 text-[#E8E8ED]">My Journey</h3>
-            <div className="grid md:grid-cols-3 gap-6">
-              {journey.map((item, index) => {
-                const Icon = item.icon;
-                return (
-                  <motion.div
-                    key={index}
-                    initial={{ opacity: 0, y: 30 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.6, delay: 0.4 + index * 0.1 }}
-                    className="bg-[#1F2A44] rounded-2xl p-6 border border-white/5 hover:border-[#F4743B]/30 transition-all duration-300"
-                  >
-                    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#F4743B]/20 to-[#FF8E53]/20 flex items-center justify-center mb-4">
-                      <Icon className="w-6 h-6 text-[#F4743B]" />
-                    </div>
-                    <h4 className="mb-3 text-white" style={{ fontWeight: 600 }}>
-                      {item.title}
-                    </h4>
-                    <p style={{ color: "#9CA3AF", fontWeight: 400, lineHeight: 1.6 }}>
-                      {item.description}
-                    </p>
-                  </motion.div>
-                );
-              })}
-            </div>
-          </div>
+          {/* Divider */}
+          <div className="border-t border-white/10 mb-16" />
 
           {/* Skills */}
-          <div className="mb-16">
-            <h3 className="mb-8 text-[#E8E8ED]">What I Work With</h3>
-            <div className="grid md:grid-cols-3 gap-6">
-              {skills.map((skillSet, index) => (
+          <div className="mb-20">
+            <h2 className="text-2xl md:text-3xl mb-8 flex items-center gap-3">
+              <Code2 className="w-6 h-6 text-[#F4743B]" />
+              Skills
+            </h2>
+            <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+              {skills.map((skillGroup, index) => (
                 <motion.div
-                  key={index}
-                  initial={{ opacity: 0, y: 30 }}
+                  key={skillGroup.category}
+                  initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6, delay: 0.6 + index * 0.1 }}
-                  className="bg-[#1F2A44] rounded-2xl p-6 border border-white/5"
+                  transition={{ duration: 0.4, delay: 0.3 + index * 0.08 }}
+                  className="rounded-2xl border border-white/10 bg-[#1F2A44]/60 p-5"
                 >
-                  <h4 className="mb-4 text-[#F4743B]" style={{ fontWeight: 600 }}>
-                    {skillSet.category}
-                  </h4>
+                  <h4 className="mb-3 text-white font-semibold">{skillGroup.category}</h4>
                   <div className="flex flex-wrap gap-2">
-                    {skillSet.tools.map((tool, toolIndex) => (
+                    {skillGroup.items.map((item) => (
                       <span
-                        key={toolIndex}
-                        className="px-3 py-1 rounded-full bg-[#2A3548] text-sm"
-                        style={{ color: "#9CA3AF", fontWeight: 500 }}
+                        key={item}
+                        className="rounded-full border border-white/15 bg-[#2A3548]/70 px-3 py-1 text-xs text-[#D2D6E0]"
                       >
-                        {tool}
+                        {item}
                       </span>
                     ))}
                   </div>
@@ -181,28 +218,62 @@ export function AboutPage() {
             </div>
           </div>
 
-          {/* Values */}
-          <div>
-            <h3 className="mb-8 text-[#E8E8ED]">My Philosophy</h3>
-            <div className="grid md:grid-cols-3 gap-6">
-              {values.map((value, index) => (
-                <motion.div
-                  key={index}
-                  initial={{ opacity: 0, y: 30 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6, delay: 0.8 + index * 0.1 }}
-                  className="bg-[#1F2A44] rounded-2xl p-6 border border-white/5 hover:border-[#F4743B]/30 transition-all duration-300"
-                >
-                  <div className="text-4xl mb-4">{value.emoji}</div>
-                  <h4 className="mb-3 text-white" style={{ fontWeight: 600 }}>
-                    {value.title}
-                  </h4>
-                  <p style={{ color: "#9CA3AF", fontWeight: 400, lineHeight: 1.6 }}>
-                    {value.description}
-                  </p>
-                </motion.div>
-              ))}
+          {/* What I Do */}
+          <div className="mb-20">
+            <h2 className="text-2xl md:text-3xl mb-8 flex items-center gap-3">
+              <Palette className="w-6 h-6 text-[#F4743B]" />
+              What I Do
+            </h2>
+            <div className="grid sm:grid-cols-2 gap-5">
+              {services.map((item, index) => {
+                const Icon = item.icon;
+                return (
+                  <motion.div
+                    key={item.title}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5, delay: 0.4 + index * 0.08 }}
+                    className="rounded-2xl border border-white/8 bg-[#1F2A44]/60 p-5 flex gap-4"
+                  >
+                    <div className={`w-10 h-10 shrink-0 rounded-xl border ${item.accentBorder} ${item.accentBg} flex items-center justify-center`}>
+                      <Icon className="w-5 h-5" style={{ color: item.accent }} />
+                    </div>
+                    <div>
+                      <h4 className="text-white font-semibold mb-1">{item.title}</h4>
+                      <p className="text-sm leading-[1.6]" style={{ color: "#9CA3AF" }}>
+                        {item.description}
+                      </p>
+                    </div>
+                  </motion.div>
+                );
+              })}
             </div>
+          </div>
+
+          {/* Quick Facts */}
+          <div className="mb-12">
+            <h2 className="text-2xl md:text-3xl mb-8 flex items-center gap-3">
+              <span className="text-[#F4743B] text-2xl">⚡</span>
+              Quick Facts
+            </h2>
+            <ul className="space-y-3 text-[#9CA3AF] text-base leading-[1.7]">
+              <li className="flex items-start gap-3">
+                <span className="text-[#F4743B] mt-1.5">•</span>
+                <span>Based in the U.S. — available for remote and local projects</span>
+              </li>
+              <li className="flex items-start gap-3">
+                <span className="text-[#F4743B] mt-1.5">•</span>
+                <span>Self-taught designer and developer</span>
+              </li>
+              <li className="flex items-start gap-3">
+                <span className="text-[#F4743B] mt-1.5">•</span>
+                <span>Focused exclusively on helping local businesses grow their online presence</span>
+              </li>
+              <li className="flex items-start gap-3">
+                <span className="text-[#F4743B] mt-1.5">•</span>
+                <span>You own the code — every project is yours to keep</span>
+              </li>
+            </ul>
           </div>
         </motion.div>
       </div>

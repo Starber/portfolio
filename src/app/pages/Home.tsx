@@ -1,6 +1,7 @@
 import { motion, useMotionValue, useSpring, useTransform } from "motion/react";
 import { useEffect, useState } from "react";
 import { ArrowDown, ArrowRight, Crown, LayoutTemplate, Plus, RefreshCw, Wrench } from "lucide-react";
+import { useLocation, useNavigate } from "react-router";
 import { sendContactEmail } from "../services/email";
 import { CometDivider } from "../components/CometDivider";
 
@@ -112,6 +113,8 @@ const MESSAGE_MAX_LENGTH = 2000;
 const MESSAGE_COUNTER_WARNING_AT = 300;
 
 export function Home() {
+  const navigate = useNavigate();
+  const location = useLocation();
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
   const [isSending, setIsSending] = useState(false);
@@ -147,6 +150,20 @@ export function Home() {
       const targetTop = section.getBoundingClientRect().top + window.scrollY - 24;
       window.scrollTo({ top: targetTop, behavior: "smooth" });
     }
+  };
+
+  const scrollToServicesSection = () => {
+    const section = document.getElementById("services");
+    if (!section) {
+      return;
+    }
+
+    const sectionTop = section.getBoundingClientRect().top + window.scrollY;
+    const sectionCenter = sectionTop + section.offsetHeight / 2;
+    const viewportCenter = window.innerHeight / 2;
+    const targetTop = Math.max(sectionCenter - viewportCenter, 0);
+
+    window.scrollTo({ top: targetTop, behavior: "smooth" });
   };
 
   const openFaqAndScroll = (faqId: string) => {
@@ -213,8 +230,60 @@ export function Home() {
     return () => window.removeEventListener("keydown", handleEscapeDismiss);
   }, [submitStatus]);
 
+  useEffect(() => {
+    const routeState = location.state as { scrollTo?: string } | null;
+    const hashTarget = location.hash ? location.hash.replace("#", "") : "";
+    const targetId = routeState?.scrollTo ?? hashTarget;
+
+    if (!targetId) {
+      return;
+    }
+
+    const timeout = window.setTimeout(() => {
+      if (targetId === "services") {
+        scrollToServicesSection();
+        return;
+      }
+
+      scrollToSection(targetId);
+    }, 80);
+
+    return () => window.clearTimeout(timeout);
+  }, [location.key, location.hash, location.state]);
+
   return (
     <div className="relative min-h-screen overflow-x-hidden px-6 pt-20 pb-0">
+      <div className="fixed top-5 right-6 z-40 flex flex-wrap justify-end gap-2">
+        <button
+          type="button"
+          onClick={() => navigate("/about")}
+          className="rounded-full border border-white/15 bg-card/75 px-4 py-2 text-sm text-subtle backdrop-blur-[2px] transition-colors hover:text-white"
+        >
+          About me
+        </button>
+        <button
+          type="button"
+          onClick={scrollToServicesSection}
+          className="rounded-full border border-white/15 bg-card/75 px-4 py-2 text-sm text-subtle backdrop-blur-[2px] transition-colors hover:text-white"
+        >
+          Services
+        </button>
+        <button
+          type="button"
+          onClick={() => scrollToSection("faq-section")}
+          className="rounded-full border border-white/15 bg-card/75 px-4 py-2 text-sm text-subtle backdrop-blur-[2px] transition-colors hover:text-white"
+        >
+          FAQ
+        </button>
+        <button
+          type="button"
+          onClick={() => scrollToSection("contact-form")}
+          className="rounded-full border border-white/15 bg-card/75 px-4 py-2 text-sm text-subtle backdrop-blur-[2px] transition-colors hover:text-white"
+        >
+          Contact me
+        </button>
+      </div>
+
       {submitStatus && (
         <div className="fixed inset-0 z-[95] flex items-center justify-center p-4">
           <div
@@ -349,6 +418,7 @@ export function Home() {
       <div className="relative z-10 max-w-7xl mx-auto w-full">
         {/* Hero */}
         <motion.div
+          id="about-me"
           initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: "easeOut" }}
@@ -456,6 +526,7 @@ export function Home() {
 
         {/* Services and Pricing — horizontal */}
         <motion.section
+          id="services"
           initial={{ opacity: 0, y: 24 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-120px" }}
@@ -822,22 +893,23 @@ export function Home() {
         <footer className="border-t border-white/10 mt-8 py-10">
           <div className="flex flex-col md:flex-row items-center justify-between gap-4">
             <p className="text-sm text-body">
-              © {new Date().getFullYear()} Starber. All rights reserved.
+              © {new Date().getFullYear()} Starber Tech. All rights reserved.
             </p>
             <div className="flex items-center gap-6">
+              <a
+                href="/starber.net-contract.pdf"
+                target="_blank"
+                rel="noreferrer"
+                className="text-sm text-body transition-colors hover:text-white"
+              >
+                Contract
+              </a>
               <button
                 type="button"
                 onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
                 className="text-sm text-body transition-colors hover:text-white"
               >
                 Back to top
-              </button>
-              <button
-                type="button"
-                onClick={() => scrollToSection("contact-form")}
-                className="text-sm text-body transition-colors hover:text-white"
-              >
-                Contact
               </button>
             </div>
           </div>
