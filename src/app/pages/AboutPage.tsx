@@ -156,32 +156,20 @@ export function AboutPage() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, delay: 0.2 }}
         >
-          {/* Header — headshot + intro, no surrounding card */}
-          <div className="mb-20 grid gap-10 md:grid-cols-[260px_minmax(0,1fr)] md:items-start">
-            {/* Headshot */}
-            <div className="mx-auto w-full max-w-[260px]">
-              <div className="aspect-[4/5] rounded-2xl border border-white/15 bg-[#2A3548] flex items-center justify-center text-center px-5">
-                <span className="text-sm text-[#9CA3AF]" style={{ fontWeight: 500 }}>
-                  Headshot placeholder
-                </span>
-              </div>
-            </div>
-
-            {/* Intro text */}
-            <div>
-              <h1 className="text-4xl md:text-5xl mb-5 leading-tight">
-                Hey, I'm{" "}
-                <span className="text-[#F4743B]">Carver</span>
-              </h1>
-              <p
-                className="text-lg max-w-2xl leading-[1.75]"
-                style={{ color: "#9CA3AF", fontWeight: 400 }}
-              >
-                I'm a 15-year-old entrepreneur who designs, builds, and manages websites for local
-                businesses. I focus on simple, understandable UX and modern design that keeps up with
-                today's standards — helping real businesses stand out online and reach more customers.
-              </p>
-            </div>
+          {/* Header */}
+          <div className="mb-20">
+            <h1 className="text-4xl md:text-5xl mb-5 leading-tight">
+              Hey, I'm{" "}
+              <span className="text-[#F4743B]">Carver</span>
+            </h1>
+            <p
+              className="text-lg max-w-2xl leading-[1.75]"
+              style={{ color: "#9CA3AF", fontWeight: 400 }}
+            >
+              I'm an entrepreneur who designs, builds, and manages websites for local
+              businesses. I focus on simple, understandable UX and modern design that keeps up with
+              today's standards — helping real businesses stand out online and reach more customers.
+            </p>
           </div>
 
           {/* Divider */}
