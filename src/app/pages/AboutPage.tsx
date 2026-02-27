@@ -1,11 +1,12 @@
 import { motion } from "motion/react";
-import { Code2, Palette, Globe, MonitorSmartphone, Search, Wrench } from "lucide-react";
-import { useEffect } from "react";
+import { Code2, Palette, Globe, MonitorSmartphone, Search, Wrench, Menu, X } from "lucide-react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import { applySeoForPath } from "../seo";
 
 export function AboutPage() {
   const navigate = useNavigate();
+  const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
 
   useEffect(() => {
     applySeoForPath("/about");
@@ -85,9 +86,14 @@ export function AboutPage() {
     );
   };
 
+  const handleMobileNavAction = (action: () => void) => {
+    action();
+    setIsMobileNavOpen(false);
+  };
+
   return (
     <div className="min-h-screen flex flex-col px-6 py-12 overflow-hidden relative">
-      <div className="fixed top-5 right-6 z-40 flex flex-wrap justify-end gap-2">
+      <div className="fixed top-5 right-6 z-40 hidden gap-2 md:flex">
         <button
           type="button"
           onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
@@ -116,6 +122,55 @@ export function AboutPage() {
         >
           Contact me
         </button>
+      </div>
+
+      <div className="fixed top-5 right-4 z-40 md:hidden">
+        <button
+          type="button"
+          onClick={() => setIsMobileNavOpen((prev) => !prev)}
+          className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/15 bg-card/80 text-subtle backdrop-blur-[2px] transition-colors hover:text-white"
+          aria-label={isMobileNavOpen ? "Close navigation menu" : "Open navigation menu"}
+          aria-expanded={isMobileNavOpen}
+          aria-controls="mobile-nav-menu"
+        >
+          {isMobileNavOpen ? <X size={18} /> : <Menu size={18} />}
+        </button>
+
+        {isMobileNavOpen && (
+          <div
+            id="mobile-nav-menu"
+            className="absolute right-0 mt-2 w-44 rounded-2xl border border-white/15 bg-card/95 p-2 shadow-xl backdrop-blur-[4px]"
+          >
+            <button
+              type="button"
+              onClick={() => handleMobileNavAction(() => window.scrollTo({ top: 0, behavior: "smooth" }))}
+              className="w-full rounded-xl px-3 py-2 text-left text-sm text-white transition-colors hover:bg-white/5"
+            >
+              About me
+            </button>
+            <button
+              type="button"
+              onClick={() => handleMobileNavAction(() => goToHomeSection("services"))}
+              className="mt-1 w-full rounded-xl px-3 py-2 text-left text-sm text-subtle transition-colors hover:bg-white/5 hover:text-white"
+            >
+              Services
+            </button>
+            <button
+              type="button"
+              onClick={() => handleMobileNavAction(() => goToHomeSection("faq-section"))}
+              className="mt-1 w-full rounded-xl px-3 py-2 text-left text-sm text-subtle transition-colors hover:bg-white/5 hover:text-white"
+            >
+              FAQ
+            </button>
+            <button
+              type="button"
+              onClick={() => handleMobileNavAction(() => goToHomeSection("contact-form"))}
+              className="mt-1 w-full rounded-xl px-3 py-2 text-left text-sm text-subtle transition-colors hover:bg-white/5 hover:text-white"
+            >
+              Contact me
+            </button>
+          </div>
+        )}
       </div>
 
       {/* Background gradient */}
