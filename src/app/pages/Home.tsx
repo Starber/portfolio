@@ -1,6 +1,6 @@
 import { motion, useMotionValue, useSpring, useTransform } from "motion/react";
 import { useEffect, useState } from "react";
-import { ArrowDown, ArrowRight, Crown, LayoutTemplate, Plus, RefreshCw, Wrench } from "lucide-react";
+import { ArrowDown, ArrowRight, Crown, LayoutTemplate, Menu, Plus, RefreshCw, Wrench, X } from "lucide-react";
 import { useLocation, useNavigate } from "react-router";
 import { sendContactEmail } from "../services/email";
 import { CometDivider } from "../components/CometDivider";
@@ -123,6 +123,7 @@ export function Home() {
   const [expandedImage, setExpandedImage] = useState<{ src: string; label: "Before" | "After" } | null>(null);
   const [openFaqId, setOpenFaqId] = useState<string | null>(null);
   const [messageValue, setMessageValue] = useState("");
+  const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
 
   useEffect(() => {
     applySeoForPath("/");
@@ -176,6 +177,11 @@ export function Home() {
     window.setTimeout(() => {
       scrollToSection("faq-section");
     }, 0);
+  };
+
+  const handleMobileNavAction = (action: () => void) => {
+    action();
+    setIsMobileNavOpen(false);
   };
 
   const handleContactSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -258,7 +264,7 @@ export function Home() {
 
   return (
     <div className="relative min-h-screen overflow-x-hidden px-6 pt-20 pb-0">
-      <div className="fixed top-5 right-6 z-40 flex flex-wrap justify-end gap-2">
+      <div className="fixed top-5 right-6 z-40 hidden gap-2 md:flex">
         <button
           type="button"
           onClick={() => navigate("/about")}
@@ -287,6 +293,55 @@ export function Home() {
         >
           Contact me
         </button>
+      </div>
+
+      <div className="fixed top-5 right-4 z-40 md:hidden">
+        <button
+          type="button"
+          onClick={() => setIsMobileNavOpen((prev) => !prev)}
+          className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/15 bg-card/80 text-subtle backdrop-blur-[2px] transition-colors hover:text-white"
+          aria-label={isMobileNavOpen ? "Close navigation menu" : "Open navigation menu"}
+          aria-expanded={isMobileNavOpen}
+          aria-controls="mobile-nav-menu"
+        >
+          {isMobileNavOpen ? <X size={18} /> : <Menu size={18} />}
+        </button>
+
+        {isMobileNavOpen && (
+          <div
+            id="mobile-nav-menu"
+            className="absolute right-0 mt-2 w-44 rounded-2xl border border-white/15 bg-card/95 p-2 shadow-xl backdrop-blur-[4px]"
+          >
+            <button
+              type="button"
+              onClick={() => handleMobileNavAction(() => navigate("/about"))}
+              className="w-full rounded-xl px-3 py-2 text-left text-sm text-subtle transition-colors hover:bg-white/5 hover:text-white"
+            >
+              About me
+            </button>
+            <button
+              type="button"
+              onClick={() => handleMobileNavAction(scrollToServicesSection)}
+              className="mt-1 w-full rounded-xl px-3 py-2 text-left text-sm text-subtle transition-colors hover:bg-white/5 hover:text-white"
+            >
+              Services
+            </button>
+            <button
+              type="button"
+              onClick={() => handleMobileNavAction(() => scrollToSection("faq-section"))}
+              className="mt-1 w-full rounded-xl px-3 py-2 text-left text-sm text-subtle transition-colors hover:bg-white/5 hover:text-white"
+            >
+              FAQ
+            </button>
+            <button
+              type="button"
+              onClick={() => handleMobileNavAction(() => scrollToSection("contact-form"))}
+              className="mt-1 w-full rounded-xl px-3 py-2 text-left text-sm text-subtle transition-colors hover:bg-white/5 hover:text-white"
+            >
+              Contact me
+            </button>
+          </div>
+        )}
       </div>
 
       {submitStatus && (
